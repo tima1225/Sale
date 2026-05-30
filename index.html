@@ -47,9 +47,9 @@
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
         .card-brand { font-size: 11px; font-weight: 800; color: #636366; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-        .card-title { font-size: 15px; font-weight: 700; color: #ffffff; line-height: 1.2; margin-bottom: 4px; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px; }
+        .card-title { font-size: 14px; font-weight: 700; color: #ffffff; line-height: 1.2; margin-bottom: 4px; cursor: pointer; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px; }
         .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
-        .price-current { font-size: 14px; font-weight: 800; color: #ffffff; letter-spacing: -0.3px; }
+        .price-current { font-size: 13px; font-weight: 800; color: #ffffff; letter-spacing: -0.3px; }
         .add-btn { background: #ffffff; color: #000000; border: none; width: 36px; height: 36px; border-radius: 12px; font-size: 20px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
         /* Экраны */
@@ -71,13 +71,13 @@
         .profile-info h3 { font-size: 18px; font-weight: 700; }
         .btn-edit-profile { position: absolute; right: 20px; top: 32px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: #fff; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 10px; cursor: pointer; }
 
-        /* ЭКРАН ОТДЕЛЬНОГО МЕНЮ ТРЕКИНГА (POIZON Логистика) */
+        /* Экран Трекинга */
         .tracking-empty-state { text-align: center; padding: 60px 20px; color: #636366; }
         .tracking-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
         .tracking-empty-state h3 { font-size: 18px; color: #fff; margin-bottom: 8px; font-weight: 700; }
         .tracking-empty-state p { font-size: 13px; max-width: 240px; margin: 0 auto; line-height: 1.4; }
 
-        .order-card-prime { background: #0c0c0e; border: 1px solid rgba(255,255,255,0.05); padding: 18px; border-radius: 24px; margin-bottom: 16px; animation: screenFade 0.4s; }
+        .order-card-prime { background: #0c0c0e; border: 1px solid rgba(255,255,255,0.05); padding: 18px; border-radius: 24px; margin-bottom: 16px; }
         .tracker-wrapper { display: flex; justify-content: space-between; position: relative; margin: 20px 0 10px 0; padding: 0 4px; }
         .tracker-line-bg { position: absolute; top: 10px; left: 10px; right: 10px; height: 3px; background: #2c2c2e; z-index: 1; }
         .tracker-line-fill { position: absolute; top: 10px; left: 10px; width: 33%; height: 3px; background: #30d158; z-index: 2; }
@@ -193,8 +193,7 @@
 
     <div id="screen-tracking" class="app-screen">
         <h2 style="font-size: 22px; margin-bottom: 20px; font-weight: 800;">Отслеживание грузов</h2>
-        <div id="trackingContainerStack">
-            </div>
+        <div id="trackingContainerStack"></div>
     </div>
 
     <div id="screen-profile" class="app-screen">
@@ -219,8 +218,8 @@
 
         <div class="menu-section-title">Информация</div>
         <div class="premium-box" style="font-size: 13px; color:#8e8e93; line-height: 1.5;">
-            <p><strong>Оригинальность:</strong> Все позиции выкупаются на POIZON, имеют фирменные пломбы.</p>
-            <p style="margin-top: 8px;"><strong>Доставка в Узбекистан:</strong> Занимает 9–14 дней с момента выкупа.</p>
+            <p><strong>Оригинальность:</strong> Все позиции выкупаются на POIZON, имеют фирменные пломбы Lab.</p>
+            <p style="margin-top: 8px;"><strong>Доставка в Узбекистан:</strong> Занимает 9–14 дней до склада в Ташкенте.</p>
         </div>
     </div>
 
@@ -269,8 +268,6 @@
 
         let activeBrand = 'all'; let activeStatus = 'all';
         let favoritesList = []; let cartState = [];
-        
-        // Системный массив для хранения оформленных заказов клиента (в памяти сессии)
         let placedOrdersLog = []; 
 
         let selectedProductContext = null; let selectedColorContext = null; let selectedSizeContext = null;
@@ -297,8 +294,8 @@
 
         function updateProfileViewText() {
             const n = localStorage.getItem('p_name') || "";
-            document.getElementById('profileUserNameText').innerText = n ? `${n} ${localStorage.getItem('p_last')||''}` : "Покупатель";
-            if(n) document.getElementById('userAvatarChar').innerText = n.charAt(0).toUpperCase() : "U";
+            document.getElementById('profileUserNameText').innerText = n ? (n + " " + (localStorage.getItem('p_last') || "")) : "Покупатель";
+            document.getElementById('userAvatarChar').innerText = n ? n.charAt(0).toUpperCase() : "U";
         }
 
         function adaptAddressPlaceholder() {
@@ -315,7 +312,6 @@
             document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
             if(tabElement) tabElement.classList.add('active');
             else {
-                // Если переход программный — подсвечиваем нужную кнопку по ID
                 const tabs = document.querySelectorAll('.nav-tab');
                 if(screenId === 'tracking') tabs[3].classList.add('active');
             }
@@ -352,13 +348,10 @@
             document.getElementById('screen-product-details').classList.add('active');
         }
 
-        /* 🚚 ЛОГИКА ОРГАНИЗАЦИИ МЕНЮ ТРЕКИНГА (С залоченной проверкой заказа) */
         function renderTrackingMenu() {
             const container = document.getElementById('trackingContainerStack');
             container.innerHTML = '';
-
             if (placedOrdersLog.length === 0) {
-                // Если человек ничего еще не купил — показываем пустую заглушку
                 container.innerHTML = `
                     <div class="tracking-empty-state">
                         <div class="tracking-empty-icon">📦</div>
@@ -368,8 +361,6 @@
                 `;
                 return;
             }
-
-            // Рендерим все активные заказы из лога покупок
             placedOrdersLog.forEach(order => {
                 container.innerHTML += `
                     <div class="order-card-prime">
@@ -381,7 +372,6 @@
                             ${order.itemsListText.replace(/\n/g, '<br>')}
                         </div>
                         <div style="margin-top:8px; font-size:12px; color:#636366;">Способ: <strong>${order.delivery}</strong> | Адрес: ${order.address}</div>
-                        
                         <div class="tracker-wrapper">
                             <div class="tracker-line-bg"></div>
                             <div class="tracker-line-fill"></div>
@@ -474,7 +464,6 @@
 
         function removeCartItem(uid) { cartState = cartState.filter(c => c.uid !== uid); const b = document.getElementById('cartGlobalBadge'); if(cartState.length > 0) b.innerText = cartState.length; else b.style.display = 'none'; renderCart(); }
 
-        // КЛИК НА КНОПКУ «ОФОРМИТЬ»: записываем заказ в меню трекинга
         function executeOrderCheckout() {
             const name = document.getElementById('inputFullname').value.trim(); const phone = document.getElementById('inputPhone').value.trim(); const address = document.getElementById('inputAddress').value.trim();
             const delSelect = document.getElementById('selectDelivery'); const delText = delSelect.options[delSelect.selectedIndex].text;
@@ -482,11 +471,8 @@
             
             let summaryArray = cartState.map(i => `• ${i.title} (Цвет: ${i.color}, Размер: ${i.size})`);
             let total = cartState.reduce((s, i) => s + i.price, 0);
-            
-            // Генерируем уникальный трек для меню слежения
             const generatedTrack = "CE-" + Math.floor(1000 + Math.random() * 9000) + "-UZ";
             
-            // Пушим заказ в глобальный системный лог трекинга
             placedOrdersLog.push({
                 trackCode: generatedTrack,
                 itemsListText: summaryArray.join('\n'),
@@ -497,13 +483,10 @@
 
             const telegramPayload = { customer_name: name, customer_phone: phone, track_code: generatedTrack, delivery_type: delText, customer_address: address || "Самовывоз", items: summaryArray.join('\n'), total: total.toLocaleString() + " сум" };
             
-            // Очищаем корзину
             cartState = [];
             document.getElementById('cartGlobalBadge').style.display = 'none';
-
-            alert(`🎉 Заказ успешно сформирован!\nПрисвоен трек-номер: ${generatedTrack}\n\nПосмотреть статус можно в меню "Трекинг".`);
+            alert(`🎉 Заказ оформлен!\nТрек-номер: ${generatedTrack}`);
             
-            // Автоматически перекидываем пользователя на новый экран трекинга
             navigateScreen('tracking', null);
 
             if(tg && tg.sendData) { 
