@@ -86,6 +86,12 @@
         .tracker-labels { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #636366; padding: 0 2px; }
         .tracker-labels span.active { color: #30d158; }
 
+        /* Кнопки управления внутри трекера заказа */
+        .order-actions-row { display: flex; gap: 10px; margin-top: 18px; border-top: 1px solid rgba(255,255,255,0.04); padding-top: 14px; }
+        .btn-order-action { flex: 1; padding: 10px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; text-align: center; border: none; text-transform: uppercase; }
+        .btn-action-cancel { background: rgba(255,69,58,0.1); color: #ff453a; border: 1px solid rgba(255,69,58,0.2); }
+        .btn-action-help { background: rgba(255,255,255,0.04); color: #fff; border: 1px solid rgba(255,255,255,0.06); }
+
         /* Блоки и инпуты */
         .premium-box { background: #0c0c0e; border: 1px solid rgba(255,255,255,0.04); border-radius: 24px; padding: 20px; margin-bottom: 16px; }
         .menu-section-title { font-size: 12px; font-weight: 700; color: #636366; text-transform: uppercase; letter-spacing: 1px; margin: 20px 4px 10px 4px; }
@@ -140,7 +146,6 @@
             <h1>CHINA EXPRESS</h1>
             <div class="badge-premium">SUM SYSTEM</div>
         </div>
-
         <div class="smart-filter-box">
             <div class="filter-row" id="brandFilterRow">
                 <div class="filter-pill active" onclick="setBrandFilter('all', this)">Все бренды</div>
@@ -149,7 +154,6 @@
                 <div class="filter-pill" onclick="setBrandFilter('New Balance', this)">New Balance</div>
             </div>
         </div>
-
         <div class="products-grid" id="catalogGridItems"></div>
     </div>
 
@@ -168,6 +172,7 @@
                 <div class="input-item"><input type="tel" id="inputPhone" placeholder="Номер телефона для связи"></div>
                 
                 <div class="input-item">
+                    <label>Вариант доставки</label>
                     <select id="selectDelivery" onchange="adaptAddressPlaceholder()">
                         <option value="cdek">ПВЗ СДЭК (Узбекистан / СНГ)</option>
                         <option value="bts">Почта BTS Express (По регионам)</option>
@@ -175,6 +180,16 @@
                         <option value="pickup">Самовывоз со склада (Ташкент)</option>
                     </select>
                 </div>
+
+                <div class="input-item">
+                    <label>Способ оплаты</label>
+                    <select id="selectPayment">
+                        <option value="cash">Наличными при получении (Ташкент)</option>
+                        <option value="card_transfer">Перевод на карту (Узнать реквизиты)</option>
+                        <option value="payme_click">Через платежные системы (Payme / Click)</option>
+                    </select>
+                </div>
+
                 <div class="input-item"><input type="text" id="inputAddress" placeholder="Укажите город и адрес филиала СДЭК"></div>
             </div>
         </div>
@@ -205,7 +220,6 @@
             </div>
             <button class="btn-edit-profile" onclick="toggleEditProfileForm()">Изменить</button>
         </div>
-
         <div class="premium-box" id="editProfileFormBlock" style="display: none;">
             <div class="input-group-box">
                 <div class="input-item"><label>Имя</label><input type="text" id="profileEditName"></div>
@@ -215,7 +229,6 @@
                 <button class="action-btn-main" onclick="savePersonalProfileData()">Сохранить профиль</button>
             </div>
         </div>
-
         <div class="menu-section-title">Информация</div>
         <div class="premium-box" style="font-size: 13px; color:#8e8e93; line-height: 1.5;">
             <p><strong>Оригинальность:</strong> Все позиции выкупаются на POIZON, имеют фирменные пломбы Lab.</p>
@@ -268,7 +281,9 @@
 
         let activeBrand = 'all'; let activeStatus = 'all';
         let favoritesList = []; let cartState = [];
-        let placedOrdersLog = []; 
+        
+        // 🔄 Считываем сохраненные заказы из localStorage, чтобы ничего не пропадало после вылета
+        let placedOrdersLog = JSON.parse(localStorage.getItem('ce_orders_storage')) || []; 
 
         let selectedProductContext = null; let selectedColorContext = null; let selectedSizeContext = null;
 
@@ -348,6 +363,7 @@
             document.getElementById('screen-product-details').classList.add('active');
         }
 
+        /* 🚚 ОТДЕЛЬНЫЙ ТРЕКИНГ С ИНТЕРАКТИВНОЙ ОТМЕНОЙ И СЛУЖБОЙ ПОДДЕРЖКИ */
         function renderTrackingMenu() {
             const container = document.getElementById('trackingContainerStack');
             container.innerHTML = '';
@@ -361,17 +377,17 @@
                 `;
                 return;
             }
+            
             placedOrdersLog.forEach(order => {
-                container.innerHTML += `
-                    <div class="order-card-prime">
-                        <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#636366;">
-                            <span>ТРЕК-НОМЕР: ${order.trackCode}</span>
-                            <span style="color:#ff9f0a;">Обрабатывается складом</span>
+                let trackerHTML = '';
+                if(order.isCancelled) {
+                    trackerHTML = `
+                        <div style="margin: 14px 0; background: rgba(255,69,58,0.08); padding: 12px; border-radius:14px; text-align:center; color:#ff453a; font-weight:700; font-size:13px; border: 1px solid rgba(255,69,58,0.15)">
+                            ❌ ДАННЫЙ ЗАКАЗ БЫЛ ОТМЕНЕН ПОЛЬЗОВАТЕЛЕМ
                         </div>
-                        <div style="margin-top: 10px; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 10px; font-size:14px; color:#8e8e93;">
-                            ${order.itemsListText.replace(/\n/g, '<br>')}
-                        </div>
-                        <div style="margin-top:8px; font-size:12px; color:#636366;">Способ: <strong>${order.delivery}</strong> | Адрес: ${order.address}</div>
+                    `;
+                } else {
+                    trackerHTML = `
                         <div class="tracker-wrapper">
                             <div class="tracker-line-bg"></div>
                             <div class="tracker-line-fill"></div>
@@ -386,9 +402,48 @@
                             <span>В пути</span>
                             <span>Готов</span>
                         </div>
+                    `;
+                }
+
+                container.innerHTML += `
+                    <div class="order-card-prime">
+                        <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#636366;">
+                            <span>ТРЕК-НОМЕР: ${order.trackCode}</span>
+                            <span style="color:${order.isCancelled ? '#ff453a' : '#ff9f0a'};">${order.isCancelled ? 'Отменен' : 'Обрабатывается складом'}</span>
+                        </div>
+                        <div style="margin-top: 10px; border-left: 2px solid ${order.isCancelled ? '#ff453a' : 'rgba(255,255,255,0.1)'}; padding-left: 10px; font-size:14px; color:#8e8e93;">
+                            ${order.itemsListText.replace(/\n/g, '<br>')}
+                        </div>
+                        <div style="margin-top:8px; font-size:12px; color:#636366;">Способ: <strong>${order.delivery}</strong> | Оплата: <strong>${order.payment || 'Наличные'}</strong></div>
+                        <div style="font-size:12px; color:#636366; margin-top:2px;">Адрес: ${order.address}</div>
+                        
+                        ${trackerHTML}
+
+                        <div class="order-actions-row">
+                            <button class="btn-order-action btn-action-cancel" onclick="cancelActiveOrder('${order.trackCode}')" ${order.isCancelled ? 'style="display:none;"' : ''}>Отменить заказ</button>
+                            <button class="btn-order-action btn-order-action btn-action-help" onclick="triggerOrderProblem('${order.trackCode}')">Проблема с заказом</button>
+                        </div>
                     </div>
                 `;
             });
+        }
+
+        // ЛОГИКА ИНТЕРАКТИВНОЙ ОТМЕНЫ
+        function cancelActiveOrder(trackCode) {
+            if(confirm(`Вы уверены, что хотите отменить заказ ${trackCode}?`)) {
+                placedOrdersLog = placedOrdersLog.map(o => {
+                    if(o.trackCode === trackCode) o.isCancelled = true;
+                    return o;
+                });
+                localStorage.setItem('ce_orders_storage', JSON.stringify(placedOrdersLog));
+                renderTrackingMenu();
+                alert('Заказ успешно переведен в статус «Отменен». Наш менеджер свяжется с вами.');
+            }
+        }
+
+        // ЛОГИКА СЛУЖБЫ ПОДДЕРЖКИ
+        function triggerOrderProblem(trackCode) {
+            alert(`⚠️ Связь со службой поддержки по заказу ${trackCode}:\n\nПожалуйста, скопируйте трек-номер и отправьте его нашему менеджеру в Telegram. Мы решим любой вопрос за 5 минут!`);
         }
 
         function setBrandFilter(brand, el) { document.querySelectorAll('#brandFilterRow .filter-pill').forEach(b => b.classList.remove('active')); el.classList.add('active'); activeBrand = brand; applyFilters(); }
@@ -464,34 +519,43 @@
 
         function removeCartItem(uid) { cartState = cartState.filter(c => c.uid !== uid); const b = document.getElementById('cartGlobalBadge'); if(cartState.length > 0) b.innerText = cartState.length; else b.style.display = 'none'; renderCart(); }
 
+        // КЛИК НА ОФОРМИТЬ: Срочное сохранение в кэш ДО закрытия приложения
         function executeOrderCheckout() {
             const name = document.getElementById('inputFullname').value.trim(); const phone = document.getElementById('inputPhone').value.trim(); const address = document.getElementById('inputAddress').value.trim();
             const delSelect = document.getElementById('selectDelivery'); const delText = delSelect.options[delSelect.selectedIndex].text;
+            const paySelect = document.getElementById('selectPayment'); const payText = paySelect.options[paySelect.selectedIndex].text;
+
             if(cartState.length === 0 || !name || !phone || (!address && delSelect.value !== 'pickup')) { alert('Заполните данные логистики!'); return; }
             
             let summaryArray = cartState.map(i => `• ${i.title} (Цвет: ${i.color}, Размер: ${i.size})`);
             let total = cartState.reduce((s, i) => s + i.price, 0);
             const generatedTrack = "CE-" + Math.floor(1000 + Math.random() * 9000) + "-UZ";
             
+            // 🔄 ПЕРВЫМ ДЕЛОМ: Намертво зашиваем заказ в локальный кэш телефона
             placedOrdersLog.push({
                 trackCode: generatedTrack,
                 itemsListText: summaryArray.join('\n'),
                 delivery: delText,
+                payment: payText,
                 address: address || "Шоурум Ташкент",
-                cost: total.toLocaleString() + " сум"
+                cost: total.toLocaleString() + " сум",
+                isCancelled: false
             });
+            localStorage.setItem('ce_orders_storage', JSON.stringify(placedOrdersLog));
 
-            const telegramPayload = { customer_name: name, customer_phone: phone, track_code: generatedTrack, delivery_type: delText, customer_address: address || "Самовывоз", items: summaryArray.join('\n'), total: total.toLocaleString() + " сум" };
+            const telegramPayload = { customer_name: name, customer_phone: phone, track_code: generatedTrack, delivery_type: delText, payment_type: payText, customer_address: address || "Самовывоз", items: summaryArray.join('\n'), total: total.toLocaleString() + " сум" };
             
             cartState = [];
             document.getElementById('cartGlobalBadge').style.display = 'none';
-            alert(`🎉 Заказ оформлен!\nТрек-номер: ${generatedTrack}`);
+            alert(`🎉 Заказ успешно принят!\nТрек-номер сохранен в меню: ${generatedTrack}`);
             
-            navigateScreen('tracking', null);
+            // Рендерим меню трекинга заново прямо сейчас перед вылетом
+            renderTrackingMenu();
 
+            // Передаем данные в Телеграм. Мессенджер закроет окно мини-приложения
             if(tg && tg.sendData) { 
                 tg.sendData(JSON.stringify(telegramPayload)); 
-                setTimeout(() => tg.close(), 1500);
+                setTimeout(() => tg.close(), 1000);
             }
         }
     </script>
