@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>TIA - Вход</title>
+    <style>
+        body { background: #060709; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
+        .box { width: 300px; padding: 20px; background: #0d0f16; border-radius: 15px; border: 1px solid #333; }
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #151822; border: 1px solid #444; color: white; border-radius: 8px; }
+        button { width: 100%; padding: 12px; background: #00d2ff; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2 style="text-align:center;">TIA ВХОД</h2>
+    <input type="text" id="id" placeholder="Ваш ID (например: TIA-12345)">
+    <input type="password" id="pass" placeholder="Пароль">
+    <button onclick="checkAuth()">ВОЙТИ</button>
+</div>
+
+<script>
+    function checkAuth() {
+        const id = document.getElementById('id').value;
+        const pass = document.getElementById('pass').value;
+        // Загружаем базу, созданную ранее
+        const users = JSON.parse(localStorage.getItem('tia_users_registry') || '{}');
+        
+        if(users[id] && users[id].pass === pass) {
+            localStorage.setItem('tia_active_session', JSON.stringify({id: id, name: users[id].name}));
+            window.location.href = 'app.html'; // Переход во внутреннюю систему
+        } else {
+            alert("Неверный ID или пароль");
+        }
+    }
+</script>
+</body>
+</html>
