@@ -721,5 +721,34 @@
             if(screenId === 'ads-hub') window.switchHubSubTab('my');
         };
     </script>
+
+    // Работа с реестром пользователей
+const UserRegistry = {
+    save: (id, data) => localStorage.setItem(`user_${id}`, JSON.stringify(data)),
+    get: (id) => JSON.parse(localStorage.getItem(`user_${id}`)),
+    exists: (id) => !!localStorage.getItem(`user_${id}`)
+};
+
+    window.onload = () => {
+    // Делегируем клики на уровне body, чтобы избежать конфликтов SVG-иконок
+    document.body.addEventListener('click', (e) => {
+        if (e.target.matches('.nav-item')) {
+            const screen = e.target.getAttribute('data-screen');
+            switchScreen(screen);
+        }
+    });
+};
+
+    function renderAdminPanel() {
+    const isAdmin = localStorage.getItem('is_admin') === 'true';
+    if (!isAdmin) return alert("Доступ запрещен!");
+    
+    // Рендеринг всех объявлений со статусом 'moderation'
+    const ads = JSON.parse(localStorage.getItem('all_ads') || '[]');
+    const pending = ads.filter(a => a.status === 'moderation');
+    
+    // ... логика отрисовки списка для одобрения ...
+}
+    
 </body>
 </html>
