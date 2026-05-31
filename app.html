@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <title>TIA - Система</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { background: #060709; color: white; padding: 20px; font-family: sans-serif; }
         .ad-card { background: #0d0f16; padding: 15px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #333; }
@@ -11,19 +11,27 @@
 </head>
 <body>
     <h1>Лента объявлений</h1>
-    <div id="data-view">Загрузка...</div>
+    <div id="data-view">Загрузка данных из облака...</div>
     <br>
     <button onclick="logout()">ВЫХОД</button>
 
 <script>
-    const supabase = supabase.createClient('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFydG1vZmhoamZpc3djdW11ZXFyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDIyNDEzNiwiZXhwIjoyMDk1ODAwMTM2fQ.c9hSZnm7M5BQCYz1yI-hVafsOGIMyyO_4FxH1nHH2JA', 'sb_publishable__rtUl4lTn3B592_IvbALKA_2OqlUkO3');
+    // Инициализируем supabase ТОЛЬКО ОДИН РАЗ
+    const supabaseUrl = 'ВАШ_PROJECT_URL';
+    const supabaseKey = 'ВАШ_ANON_KEY';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
     
-    // Проверка входа
-    if(!localStorage.getItem('user_session')) window.location.href = 'index.html';
+    // Проверка сессии
+    if(!localStorage.getItem('user_session')) {
+        window.location.href = 'index.html';
+    }
 
+    // Загрузка объявлений
     async function loadAds() {
         const { data, error } = await supabase.from('ads').select('*');
-        if (data) {
+        if (error) {
+            document.getElementById('data-view').innerHTML = "Ошибка: " + error.message;
+        } else {
             document.getElementById('data-view').innerHTML = data.map(ad => 
                 `<div class="ad-card"><h3>${ad.title}</h3><p>${ad.price} сум</p></div>`
             ).join('');
