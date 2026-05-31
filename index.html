@@ -2,753 +2,121 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TIA - Secure Enterprise Marketplace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TIA Enterprise Engine</title>
     <style>
         @import url('https://fonts.cdnfonts.com/css/brigends-king');
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-        * {
-            box-sizing: border-box;
-            margin: 0; padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        :root {
-            --bg-main: #060709;
-            --bg-card: #0d0f16;
-            --bg-input: #151822;
-            --text-main: #ffffff;
-            --text-muted: #6b7280;
-            --border: rgba(255, 255, 255, 0.05);
-            --accent: #00d2ff;
-            --accent-gradient: linear-gradient(135deg, #2f80ed 0%, #00d2ff 100%);
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --shadow: rgba(0, 0, 0, 0.5);
-            --nav-bg: rgba(13, 15, 22, 0.85);
-        }
-
-        [data-theme="light"] {
-            --bg-main: #f3f4f6;
-            --bg-card: #ffffff;
-            --bg-input: #e5e7eb;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --border: rgba(0, 0, 0, 0.08);
-            --shadow: rgba(0, 0, 0, 0.04);
-            --nav-bg: rgba(255, 255, 255, 0.9);
-        }
-
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            padding: 16px 14px calc(100px + env(safe-area-inset-bottom)) 14px;
-            transition: background-color 0.3s, color 0.3s;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .brand-font {
-            font-family: 'Brigends King', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .app-screen { display: none; width: 100%; max-width: 600px; margin: 0 auto; }
-        .app-screen.active { display: block; animation: screenFadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes screenFadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .top-header {
-            background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
-            padding: 16px 20px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 20px var(--shadow);
-        }
-        .header-logo { font-size: 24px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header-subtitle { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
-
-        .card-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 14px; box-shadow: 0 4px 16px var(--shadow); }
-        .input-group { margin-bottom: 14px; }
-        .input-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
-        .input-group input, .input-group select, .input-group textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); padding: 14px; border-radius: 10px; font-size: 14px; outline: none; font-family: inherit; transition: border-color 0.2s; }
-        .input-group input:focus, .input-group textarea:focus { border-color: var(--accent); }
-
-        .btn-primary { background: var(--accent-gradient); color: #fff; border: none; padding: 16px; border-radius: 10px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; width: 100%; cursor: pointer; font-family: 'Brigends King', sans-serif; transition: transform 0.1s; }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-primary:disabled { background: var(--bg-input); color: var(--text-muted); opacity: 0.6; cursor: not-allowed; pointer-events: none; }
-        .btn-secondary { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
-
-        .grid-ads { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        @media (max-width: 440px) { .grid-ads { grid-template-columns: 1fr; } }
-        .ad-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 10px; cursor: pointer; position: relative; box-shadow: 0 4px 12px var(--shadow); }
-        .ad-img { width: 100%; height: 130px; background: var(--bg-input); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
-        .ad-img img { width: 100%; height: 100%; object-fit: cover; }
-        .ad-price { font-size: 15px; font-weight: 700; color: var(--success); margin-bottom: 4px; }
-        .ad-title { font-size: 13px; font-weight: 500; line-height: 1.4; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .vip-tag { position: absolute; top: 16px; left: 16px; background: var(--warning); color: #000; font-size: 8px; font-weight: 800; padding: 3px 6px; border-radius: 4px; text-transform: uppercase; }
-
-        .section-tabs { display: flex; background: var(--bg-card); border: 1px solid var(--border); padding: 4px; border-radius: 12px; margin-bottom: 14px; }
-        .tab-node { flex: 1; text-align: center; padding: 10px; font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 8px; }
-        .tab-node.active { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); }
-
-        .wizard-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
-        .w-tab { flex: 1; height: 4px; background: var(--bg-input); border-radius: 2px; }
-        .w-tab.active { background: var(--accent); }
-        .wizard-step { display: none; }
-        .wizard-step.active { display: block; }
-        .option-selector-card { background: var(--bg-input); border: 1px solid var(--border); padding: 14px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; font-weight: 600; font-size: 13px; }
-        .option-selector-card.selected { border-color: var(--accent); background: rgba(0, 210, 255, 0.03); }
-
-        .uploader-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
-        .uploader-slot { height: 75px; background: var(--bg-input); border: 1px dashed var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--text-muted); cursor: pointer; overflow: hidden; }
-        .uploader-slot img { width: 100%; height: 100%; object-fit: cover; }
-
-        .faq-item { border-bottom: 1px solid var(--border); padding: 12px 0; cursor: pointer; }
-        .faq-q { font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; }
-        .faq-a { font-size: 12px; color: var(--text-muted); margin-top: 6px; display: none; line-height: 1.5; }
-
-        .bottom-nav {
-            position: fixed; bottom: 16px; left: 16px; right: 16px;
-            background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border); border-radius: 20px;
-            display: flex; justify-content: space-around; align-items: center;
-            padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); z-index: 1000;
-        }
-        .nav-item {
-            background: transparent; border: none; color: var(--text-muted);
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            cursor: pointer; width: 25%; transition: color 0.2s, transform 0.2s;
-        }
-        .nav-item * { pointer-events: none; }
-        .nav-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .nav-item span { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .nav-item.active { color: var(--accent); }
-        .nav-item.active svg { stroke-width: 2.5; transform: translateY(-1px); }
-
-        .admin-data-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
-        .admin-data-table th, .admin-data-table td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border); }
-        .admin-data-table th { color: var(--text-muted); font-weight: 600; }
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+        :root { --bg: #060709; --accent: #00d2ff; --text: #fff; --card: #0d0f16; --danger: #ef4444; --success: #10b981; }
+        body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; margin: 0; padding-bottom: 100px; }
+        .screen { display: none; padding: 20px; }
+        .screen.active { display: block; }
+        .brand { font-family: 'Brigends King', sans-serif; font-size: 40px; text-align: center; margin: 30px 0; }
+        .input-box { width: 100%; padding: 15px; margin: 10px 0; background: #151822; border: 1px solid #333; border-radius: 10px; color: white; }
+        button { width: 100%; padding: 15px; background: var(--accent); border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; font-family: 'Brigends King', sans-serif; color: #000; }
+        .admin-card { background: var(--card); border: 1px solid #333; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #111; display: none; padding: 15px; justify-content: space-around; border-top: 1px solid #333; z-index: 1000; }
+        .nav-btn { cursor: pointer; font-family: 'Brigends King', sans-serif; }
     </style>
 </head>
-<body data-theme="dark">
+<body>
 
-    <div id="screen-auth" class="app-screen active" style="margin-top: 5vh;">
-        <div style="text-align:center; margin-bottom: 30px;">
-            <div class="brand-font header-logo" style="font-size: 60px;">TIA</div>
-            <div class="header-subtitle" style="margin-top: 4px;">Безопасная Экосистема Аутентификации</div>
-        </div>
-
-        <div class="section-tabs">
-            <div class="tab-node active" id="authTab-login" onclick="window.switchAuthMode('login')">Вход</div>
-            <div class="tab-node" id="authTab-register" onclick="window.switchAuthMode('register')">Регистрация</div>
-        </div>
-
-        <div class="card-box">
-            <div id="authRegisterFields" style="display: none;">
-                <div class="input-group"><label>Полное имя продавца</label><input type="text" id="regName" placeholder="Введите имя"></div>
-                <div class="input-group"><label>Контактный телефон</label><input type="tel" id="regPhone" placeholder="+998"></div>
-            </div>
-            
-            <div class="input-group" id="loginIdGroup">
-                <label>Ваш системный ID (TIA-XXXXX)</label>
-                <input type="text" id="loginId" placeholder="Только для входа">
-            </div>
-
-            <div class="input-group">
-                <label>Секретный пароль доступа</label>
-                <input type="password" id="authPassword" placeholder="••••••••">
-            </div>
-
-            <div class="input-group" id="authConfirmPasswordGroup" style="display: none;">
-                <label>Подтверждение пароля</label>
-                <input type="password" id="authConfirmPassword" placeholder="••••••••">
-            </div>
-
-            <button class="btn-primary" id="mainAuthBtn" onclick="window.processAuthWorkflow()">Войти в систему</button>
-
-            <div style="margin-top:20px; text-align:center; padding-top:16px; border-top:1px solid var(--border);">
-                <button class="btn-secondary" style="color:var(--warning); border-color:var(--warning); width:100%; font-family:'Brigends King';" onclick="window.processAdminTerminalAuth()">Вход в панель управления</button>
-            </div>
-        </div>
+<div id="screen-auth" class="screen active">
+    <h1 class="brand">TIA</h1>
+    <div id="reg-fields" style="display:none;">
+        <input type="text" id="reg-name" class="input-box" placeholder="Ваше Имя">
+        <input type="password" id="reg-pass" class="input-box" placeholder="Пароль">
+        <input type="password" id="reg-pass-2" class="input-box" placeholder="Повторите пароль">
+        <button onclick="app.register()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
     </div>
-
-    <div id="screen-feed" class="app-screen">
-        <div class="top-header">
-            <div class="brand-font header-logo">TIA</div>
-            <button class="btn-secondary" onclick="window.toggleVisualThemeMode()">🌓 Смена темы</button>
-        </div>
-        <div class="input-group" style="position:relative;">
-            <input type="text" placeholder="Поиск по названию..." oninput="window.handleLiveSearch(this.value)" style="padding-left:40px;">
-            <span style="position:absolute; left:14px; top:15px; color:var(--text-muted);">🔍</span>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-            <button class="btn-secondary" onclick="document.getElementById('filterPanelBlock').classList.toggle('open')">🎛️ Скрыть/Показать фильтры</button>
-            <span style="font-size:11px; color:var(--text-muted);" id="adsCounterLabel">0 объектов</span>
-        </div>
-        <div class="filter-panel" id="filterPanelBlock" style="display:none; background:var(--bg-card); padding:14px; border:1px solid var(--border); border-radius:12px; margin-bottom:14px;">
-            <div class="input-group"><label>Минимальная цена (сум)</label><input type="number" id="filterPriceFrom" oninput="window.applyCatalogFiltersEngine()"></div>
-            <div class="input-group"><label>Максимальная цена (сум)</label><input type="number" id="filterPriceTo" oninput="window.applyCatalogFiltersEngine()"></div>
-        </div>
-        <div class="grid-ads" id="catalogGlobalGrid"></div>
+    <div id="login-fields">
+        <input type="text" id="login-id" class="input-box" placeholder="ID (TIA-XXXXX)">
+        <input type="password" id="login-pass" class="input-box" placeholder="Пароль">
+        <button onclick="app.login()">ВОЙТИ</button>
     </div>
+    <button style="background:none; color:gray;" onclick="app.toggleAuth()">Регистрация / Вход</button>
+    <button style="background:none; color:var(--danger);" onclick="app.adminLogin()">Вход для Админа</button>
+</div>
 
-    <div id="screen-details" class="app-screen">
-        <div class="top-header"><button class="btn-secondary" onclick="window.navTo('feed')">← К каталогу</button><div class="brand-font header-logo" style="font-size:20px;">TIA</div></div>
-        <div id="detailedProductView"></div>
-    </div>
+<div id="screen-feed" class="screen"><h2 class="brand">ЛЕНТА</h2><div id="feed"></div></div>
+<div id="screen-admin" class="screen"><h2 class="brand" style="color:red;">АДМИН</h2><div id="admin-view"></div></div>
 
-    <div id="screen-ads-hub" class="app-screen">
-        <div class="top-header"><div class="brand-font header-logo">TIA</div><div class="header-subtitle">Объявления</div></div>
-        
-        <div class="section-tabs">
-            <div class="tab-node active" id="hubTab-my" onclick="window.switchHubSubTab('my')">Мои объявления</div>
-            <div class="tab-node" id="hubTab-create" onclick="window.switchHubSubTab('create')">Разместить новое</div>
-        </div>
+<div id="nav-bar" class="nav-bar">
+    <div class="nav-btn" onclick="app.go('screen-feed')">ЛЕНТА</div>
+    <div class="nav-btn" onclick="app.go('screen-admin')">АДМИН</div>
+    <div class="nav-btn" onclick="app.logout()">ВЫХОД</div>
+</div>
 
-        <div id="block-myAdsList">
-            <div style="display:flex; gap:6px; background:var(--bg-input); padding:4px; border-radius:8px; margin-bottom:12px;">
-                <div class="tab-node active" id="myAdsSub-active" style="padding:6px; font-size:11px;" onclick="window.renderMyAdsGrid('active')">Опубликованные</div>
-                <div class="tab-node" id="myAdsSub-moderation" style="padding:6px; font-size:11px;" onclick="window.renderMyAdsGrid('moderation')">На модерации</div>
-            </div>
-            <div class="grid-ads" id="myPersonalAdsGrid"></div>
-        </div>
+<script>
+    window.app = {
+        users: JSON.parse(localStorage.getItem('tia_users') || '{}'),
+        isRegMode: false,
 
-        <div id="block-wizardForm" style="display: none;">
-            <div class="card-box" id="wizardCoreFlowBox">
-                <div class="wizard-tabs">
-                    <div class="w-tab active" id="wb-1"></div><div class="w-tab" id="wb-2"></div><div class="w-tab" id="wb-3"></div>
-                    <div class="w-tab" id="wb-4"></div><div class="w-tab" id="wb-5"></div><div class="w-tab" id="wb-6"></div>
-                </div>
+        toggleAuth: function() {
+            this.isRegMode = !this.isRegMode;
+            document.getElementById('reg-fields').style.display = this.isRegMode ? 'block' : 'none';
+            document.getElementById('login-fields').style.display = this.isRegMode ? 'none' : 'block';
+        },
 
-                <div class="wizard-step active" id="wstep-1">
-                    <label style="font-size:11px; color:var(--text-muted); font-weight:700;">ШАГ 1 ИЗ 6</label>
-                    <h3 style="margin-bottom:14px; font-size:16px;">Выберите рубрику размещения</h3>
-                    <div class="option-selector-card" onclick="window.selectWizardCategory('electro', this)">Электроника</div>
-                    <div class="option-selector-card" onclick="window.selectWizardCategory('auto', this)">Транспорт</div>
-                    <div class="option-selector-card" onclick="window.selectWizardCategory('realty', this)">Недвижимость</div>
-                </div>
+        register: function() {
+            const name = document.getElementById('reg-name').value;
+            const pass = document.getElementById('reg-pass').value;
+            const pass2 = document.getElementById('reg-pass-2').value;
+            if(pass !== pass2) return alert("Пароли не совпадают!");
+            const id = "TIA-" + Math.floor(Math.random()*90000+10000);
+            this.users[id] = { name, pass };
+            localStorage.setItem('tia_users', JSON.stringify(this.users));
+            alert("Успешно! Ваш ID: " + id);
+        },
 
-                <div class="wizard-step" id="wstep-2">
-                    <label style="font-size:11px; color:var(--text-muted); font-weight:700;">ШАГ 2 ИЗ 6</label>
-                    <h3 style="margin-bottom:14px; font-size:16px;">Загрузка медиафайлов</h3>
-                    <div class="uploader-grid">
-                        <div class="uploader-slot" id="us-0" onclick="window.simulateMediaUpload(0)">+</div>
-                        <div class="uploader-slot" id="us-1" onclick="window.simulateMediaUpload(1)">+</div>
-                        <div class="uploader-slot" id="us-2" onclick="window.simulateMediaUpload(2)">+</div>
-                        <div class="uploader-slot" id="us-3" onclick="window.simulateMediaUpload(3)">+</div>
-                    </div>
-                    <div style="display:flex; gap:10px;"><button class="btn-secondary" onclick="window.wizardBack()">Назад</button><button class="btn-primary" id="wbtn-2" disabled onclick="window.wizardNext()">Далее</button></div>
-                </div>
-
-                <div class="wizard-step" id="wstep-3">
-                    <label style="font-size:11px; color:var(--text-muted); font-weight:700;">ШАГ 3 ИЗ 6</label>
-                    <h3 style="margin-bottom:14px; font-size:16px;">Текстовая спецификация</h3>
-                    <div class="input-group"><label>Название объявления *</label><input type="text" id="wiTitle" oninput="window.validateWizardDataLive()"></div>
-                    <div class="input-group"><label>Описание товара *</label><textarea id="wiDesc" rows="4" oninput="window.validateWizardDataLive()"></textarea></div>
-                    <div style="display:flex; gap:10px;"><button class="btn-secondary" onclick="window.wizardBack()">Назад</button><button class="btn-primary" id="wbtn-3" disabled onclick="window.wizardNext()">Далее</button></div>
-                </div>
-
-                <div class="wizard-step" id="wstep-4">
-                    <label style="font-size:11px; color:var(--text-muted); font-weight:700;">ШАГ 4 ИЗ 6</label>
-                    <h3 style="margin-bottom:14px; font-size:16px;">Характеристики товара</h3>
-                    <div id="dynamicSpecsFieldsContainer"></div>
-                    <button class="btn-secondary" style="width:100%; margin-top:6px;" onclick="window.addNewSpecificationRow()">Добавить параметр</button>
-                    <div style="display:flex; gap:10px; margin-top:14px;"><button class="btn-secondary" onclick="window.wizardBack()">Назад</button><button class="btn-primary" onclick="window.wizardNext()">Далее</button></div>
-                </div>
-
-                <div class="wizard-step" id="wstep-5">
-                    <label style="font-size:11px; color:var(--text-muted); font-weight:700;">ШАГ 5 ИЗ 6</label>
-                    <h3 style="margin-bottom:14px; font-size:16px;">Экономика и локация</h3>
-                    <div class="input-group"><label>Цена (сум) *</label><input type="number" id="wiPrice" oninput="window.validateWizardDataLive()"></div>
-                    <div class="input-group"><label>Район расположения *</label><input type="text" id="wiDistrict" oninput="window.validateWizardDataLive()"></div>
-                    <div style="display:flex; gap:10px;"><button class="btn-secondary" onclick="window.wizardBack()">Назад</button><button class="btn-primary" id="wbtn-5" disabled onclick="window.wizardNext()">Далее</button></div>
-                </div>
-
-                <div class="wizard-step" id="wstep-6">
-                    <label style="font-size:11px; color:var(--text-muted); font-weight:700;">ШАГ 6 ИЗ 6</label>
-                    <h3 style="margin-bottom:14px; font-size:16px;">Продвижение объявления</h3>
-                    <div id="wizardProAlertBlock" class="card-box" style="background:rgba(239,68,68,0.06); border-color:var(--danger); display:none;"><p style="font-size:11px; color:var(--danger); font-weight:700;">Опция TOP VIP заблокирована. Требуется тариф PRO.</p></div>
-                    <label style="display:flex; align-items:center; gap:8px; font-weight:600; font-size:13px; margin-bottom:16px;"><input type="checkbox" id="wiVipCheckbox" onchange="window.interceptVipActivationToggle(this)"> Подключить премиум статус TOP VIP</label>
-                    <div style="display:flex; gap:10px;"><button class="btn-secondary" onclick="window.wizardBack()">Назад</button><button class="btn-primary" style="background:var(--success);" onclick="window.submitAdToDatabaseEngine()">Опубликовать</button></div>
-                </div>
-            </div>
-
-            <div class="card-box" id="wizardPipelineSuccessState" style="display: none; text-align: center; padding: 30px 10px;">
-                <h3 style="color:var(--success); margin-bottom:8px;">Объявление создано!</h3>
-                <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Оно успешно ушло на модерацию администратору.</p>
-                <button class="btn-primary" onclick="window.restartWizardInfinitePipeline()">Разместить еще одно объявление</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="screen-support" class="app-screen">
-        <div class="top-header"><div class="brand-font header-logo">TIA</div><div class="header-subtitle">Поддержка</div></div>
-        <div class="card-box">
-            <h3 style="font-size:15px; margin-bottom:12px;">Частые вопросы (FAQ)</h3>
-            <div class="faq-item" onclick="window.toggleFaqNode(this)"><div class="faq-q"><span>Сроки проверки объявлений?</span><span>▼</span></div><div class="faq-a">Модерация занимает от 5 до 10 минут.</div></div>
-            <div class="faq-item" onclick="window.toggleFaqNode(this)"><div class="faq-q"><span>Как активировать PRO тариф?</span><span>▼</span></div><div class="faq-a">Оставьте заявку в профиле, свяжитесь с менеджером. Администратор активирует тариф в панели.</div></div>
-        </div>
-        <button class="btn-primary" onclick="alert('Связь с оператором...')">Задать вопрос поддержке</button>
-    </div>
-
-    <div id="screen-profile" class="app-screen">
-        <div class="top-header"><div class="brand-font header-logo">TIA</div><button class="btn-secondary" style="color:var(--danger); border-color:var(--danger);" onclick="window.executeAccountLogout()">Выйти</button></div>
-        <div class="card-box" style="display:flex; align-items:center; gap:14px;">
-            <div style="width:64px; height:64px; border-radius:50%; background:var(--bg-input); border:2px dashed var(--border); display:flex; align-items:center; justify-content:center;"><span style="font-size:10px; color:var(--text-muted);">ФОТО</span></div>
-            <div>
-                <h3 id="profUserFullname">Загрузка данных...</h3>
-                <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Системный ID: <span id="profUserGeneratedId" style="color:var(--text-main); font-weight:700;">-</span></p>
-                <p style="font-size:11px; font-weight:700; margin-top:2px;" id="profBillingStatusBadge">-</p>
-            </div>
-        </div>
-        <div class="card-box" style="border-left:4px solid var(--warning);">
-            <h4>Получение PRO тарифа</h4>
-            <p style="font-size:11px; color:var(--text-muted); margin:6px 0;" id="profBillingTimerLabel">Тариф: LITE (Базовый)</p>
-            <div id="proActionAreaBlock"><button class="btn-secondary" style="width:100%; border-color:var(--warning); color:var(--warning);" onclick="window.triggerProRequestSimulation()">Связаться с менеджером для оплаты PRO</button></div>
-        </div>
-    </div>
-
-    <div id="screen-admin" class="app-screen">
-        <div class="top-header"><button class="btn-secondary" onclick="window.executeAccountLogout()">← Выход</button><div class="brand-font header-logo" style="color:var(--warning);">TIA ANALYTICS</div></div>
-        <div class="card-box" style="display:grid; grid-template-columns: repeat(2,1fr); gap:10px; padding:12px;">
-            <div style="background:var(--bg-input); padding:10px; border-radius:8px;"><p style="font-size:9px; color:var(--text-muted);">УНИКАЛЬНЫЕ ПОСЕЩЕНИЯ</p><h4 style="font-size:15px; color:var(--accent);">4,289 сессий</h4></div>
-            <div style="background:var(--bg-input); padding:10px; border-radius:8px;"><p style="font-size:9px; color:var(--text-muted);">ЗАРЕГИСТРИРОВАНО ПРОДАВЦОВ</p><h4 style="font-size:15px; color:var(--success);" id="admStatSellersCount">0</h4></div>
-            <div style="background:var(--bg-input); padding:10px; border-radius:8px;"><p style="font-size:9px; color:var(--text-muted);">ПРОСМОТРЫ ОБЪЯВЛЕНИЙ</p><h4 style="font-size:15px; color:var(--warning);">31,894 показов</h4></div>
-            <div style="background:var(--bg-input); padding:10px; border-radius:8px;"><p style="font-size:9px; color:var(--text-muted);">ВЫРУЧКА С ПОДПИСОК</p><h4 style="font-size:15px;" id="admStatRevenueCounter">0 UZS</h4></div>
-        </div>
-        <div style="display:flex; gap:6px; background:var(--bg-input); padding:4px; border-radius:8px; margin-bottom:14px;">
-            <div class="tab-node active" id="admTab-moderation" onclick="window.switchAdminSubTab('moderation')">Модерация ленты</div>
-            <div class="tab-node" id="admTab-billing" onclick="window.switchAdminSubTab('billing')">Заявки на PRO</div>
-            <div class="tab-node" id="admTab-users" onclick="window.switchAdminSubTab('users')">Реестр системных пользователей</div>
-        </div>
-        <div id="adminDynamicDataView"></div>
-    </div>
-
-    <div class="bottom-nav" id="globalAppNavbar" style="display: none;">
-        <button class="nav-item active" onclick="window.navTo('feed', this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Лента</span></button>
-        <button class="nav-item" onclick="window.navTo('ads-hub', this)"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg><span>Объявления</span></button>
-        <button class="nav-item" onclick="window.navTo('support', this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span>Поддержка</span></button>
-        <button class="nav-item" onclick="window.navTo('profile', this)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Профиль</span></button>
-    </div>
-
-    <script>
-        window.GLOBAL_DATABASE = JSON.parse(localStorage.getItem('tia_master_db')) || [
-            { id: 1001, category: "electro", title: "Apple MacBook Pro 16 M3 Max", price: 34500000, condition: "new", region: "Ташкент", district: "Мирабадский", phone: "+998 90 999-11-22", desc: "Официальный ноутбук, запечатан, 1 год мировой гарантии.", images: ["https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&q=80"], customFields: [{k:"ОЗУ", v:"48GB"}], seller: {name:"Сергей", id:"TIA-77123"}, status: "active", vip: true }
-        ];
-
-        window.SYSTEM_USERS = JSON.parse(localStorage.getItem('tia_users_registry')) || {};
-        window.CURRENT_SESSION_USER = JSON.parse(localStorage.getItem('tia_active_session')) || null;
-        window.ADMIN_AUTHORIZED = false;
-
-        window.WIZARD_STEP = 1; window.WIZARD_CATEGORY = ""; window.WIZARD_MEDIA = ["","","",""];
-        window.CATALOG_SEARCH = ""; window.MY_ADS_SUB_FILTER = "active"; window.ADMIN_SUB_TAB = "moderation";
-
-        window.addEventListener('DOMContentLoaded', () => {
-            window.evaluateActiveBillingTiersTimeframe();
-            window.applyCatalogFiltersEngine();
-            if(window.CURRENT_SESSION_USER) { window.restoreUserActiveSessionUi(); }
-        });
-
-        window.saveStateToLocalStorage = function() {
-            localStorage.setItem('tia_master_db', JSON.stringify(window.GLOBAL_DATABASE));
-            localStorage.setItem('tia_users_registry', JSON.stringify(window.SYSTEM_USERS));
-            localStorage.setItem('tia_active_session', JSON.stringify(window.CURRENT_SESSION_USER));
-        };
-
-        window.AUTH_MODE = "login";
-        window.switchAuthMode = function(mode) {
-            window.AUTH_MODE = mode;
-            document.getElementById('authTab-login').classList.toggle('active', mode === 'login');
-            document.getElementById('authTab-register').classList.toggle('active', mode === 'register');
-            document.getElementById('authRegisterFields').style.display = mode === 'register' ? 'block' : 'none';
-            document.getElementById('loginIdGroup').style.display = mode === 'login' ? 'block' : 'none';
-            document.getElementById('authConfirmPasswordGroup').style.display = mode === 'register' ? 'block' : 'none';
-            document.getElementById('mainAuthBtn').innerText = mode === 'login' ? 'Войти в систему' : 'Зарегистрировать профиль';
-        };
-
-        window.processAuthWorkflow = function() {
-            const password = document.getElementById('authPassword').value;
-            if(window.AUTH_MODE === 'register') {
-                const name = document.getElementById('regName').value.trim();
-                const phone = document.getElementById('regPhone').value.trim();
-                const confirmPass = document.getElementById('authConfirmPassword').value;
-
-                if(!name || !phone || !password) return alert("Пожалуйста, заполните обязательные регистрационные поля.");
-                if(password !== confirmPass) return alert("Ошибка валидации: Пароли доступа не совпадают.");
-                if(password.length < 4) return alert("Пароль доступа слишком короткий (минимум 4 знака).");
-
-                const generatedId = "TIA-" + Math.floor(10000 + Math.random() * 89999);
-                window.SYSTEM_USERS[generatedId] = { name: name, phone: phone, pass: password, proExpiry: 0, proRequest: "none" };
-                window.CURRENT_SESSION_USER = { id: generatedId, name: name, phone: phone };
-                
-                window.saveStateToLocalStorage();
-                alert(`Регистрация завершена! Ваш уникальный системный ID: ${generatedId}\nЗапомните его для последующих входов.`);
-                window.restoreUserActiveSessionUi();
-            } else {
-                const loginId = document.getElementById('loginId').value.trim();
-                if(!window.SYSTEM_USERS[loginId] || window.SYSTEM_USERS[loginId].pass !== password) {
-                    return alert("Ошибка безопасности: Неверный системный ID или пароль.");
-                }
-                window.CURRENT_SESSION_USER = { id: loginId, name: window.SYSTEM_USERS[loginId].name, phone: window.SYSTEM_USERS[loginId].phone };
-                window.saveStateToLocalStorage();
-                window.restoreUserActiveSessionUi();
-            }
-        };
-
-        window.restoreUserActiveSessionUi = function() {
-            document.getElementById('screen-auth').classList.remove('active');
-            document.getElementById('globalAppNavbar').style.display = "flex";
-            window.navTo('feed', document.querySelectorAll('.nav-item')[0]);
-        };
-
-        window.processAdminTerminalAuth = function() {
-            if(prompt("Введите пароль доступа к терминалу управления:") === "admin123") {
-                window.ADMIN_AUTHORIZED = true;
+        login: function() {
+            const id = document.getElementById('login-id').value;
+            const pass = document.getElementById('login-pass').value;
+            if(this.users[id] && this.users[id].pass === pass) {
+                localStorage.setItem('session', id);
+                this.go('screen-feed');
+                document.getElementById('nav-bar').style.display = 'flex';
                 document.getElementById('screen-auth').classList.remove('active');
-                window.navTo('admin');
-            } else { alert("Доступ заблокирован."); }
-        };
+            } else { alert("Ошибка доступа"); }
+        },
 
-        window.executeAccountLogout = function() {
-            window.CURRENT_SESSION_USER = null; window.ADMIN_AUTHORIZED = false;
-            window.saveStateToLocalStorage();
-            document.getElementById('globalAppNavbar').style.display = "none";
-            document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('screen-auth').classList.add('active');
-        };
+        adminLogin: function() {
+            if(prompt("Пароль админа:") === "admin") {
+                this.go('screen-admin');
+                document.getElementById('nav-bar').style.display = 'flex';
+                document.getElementById('screen-auth').classList.remove('active');
+            }
+        },
 
-        window.toggleVisualThemeMode = function() {
-            document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        };
-
-        window.handleLiveSearch = function(val) { window.CATALOG_SEARCH = val.trim().toLowerCase(); window.applyCatalogFiltersEngine(); };
-        
-        window.applyCatalogFiltersEngine = function() {
-            const fromP = parseFloat(document.getElementById('filterPriceFrom').value) || 0;
-            const toP = parseFloat(document.getElementById('filterPriceTo').value) || Infinity;
-            
-            let filtered = window.GLOBAL_DATABASE.filter(ad => {
-                if(ad.status !== 'active') return false;
-                if(fromP && ad.price < fromP) return false;
-                if(toP && ad.price > toP) return false;
-                if(window.CATALOG_SEARCH && !ad.title.toLowerCase().includes(window.CATALOG_SEARCH)) return false;
-                return true;
+        renderAdmin: function() {
+            const view = document.getElementById('admin-view');
+            view.innerHTML = "";
+            Object.entries(this.users).forEach(([id, data]) => {
+                const div = document.createElement('div');
+                div.className = 'admin-card';
+                div.innerHTML = `<p>ID: ${id} | Имя: ${data.name}</p>
+                                 <button style="background:var(--danger)" onclick="app.deleteUser('${id}')">УДАЛИТЬ</button>`;
+                view.appendChild(div);
             });
+        },
 
-            document.getElementById('adsCounterLabel').innerText = `${filtered.length} объектов`;
-            const grid = document.getElementById('catalogGlobalGrid');
-            if(filtered.length === 0) { grid.innerHTML = '<p style="grid-column:span 2; text-align:center; padding:20px; color:var(--text-muted);">Раздел пуст</p>'; return; }
+        deleteUser: function(id) {
+            delete this.users[id];
+            localStorage.setItem('tia_users', JSON.stringify(this.users));
+            this.renderAdmin();
+        },
 
-            grid.innerHTML = filtered.map(ad => `
-                <div class="ad-item" onclick="window.openProductDetailsViewNode(${ad.id})">
-                    ${ad.vip ? `<span class="vip-tag">TOP VIP</span>` : ''}
-                    <div class="ad-img"><img src="${ad.images[0]}"></div>
-                    <div class="ad-price">${ad.price.toLocaleString()} сум</div>
-                    <div class="ad-title">${ad.title}</div>
-                </div>
-            `).join('');
-        };
+        go: function(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(id === 'screen-admin') this.renderAdmin();
+        },
 
-        window.openProductDetailsViewNode = function(id) {
-            const ad = window.GLOBAL_DATABASE.find(p => p.id === id);
-            if(!ad) return; window.navTo('details');
-            let fieldsHTML = ad.customFields.map(f => `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border); font-size:13px;"><span style="color:var(--text-muted);">${f.k}</span><strong>${f.v}</strong></div>`).join('');
-            
-            document.getElementById('detailedProductView').innerHTML = `
-                <div class="card-box">
-                    <div style="width:100%; height:200px; border-radius:10px; overflow:hidden; margin-bottom:12px;"><img src="${ad.images[0]}" style="width:100%; height:100%; object-fit:cover;"></div>
-                    <h2 style="color:var(--success); font-size:24px; font-weight:800; margin-bottom:4px;">${ad.price.toLocaleString()} UZS</h2>
-                    <h3>${ad.title}</h3>
-                    <p style="font-size:13px; color:var(--text-muted); margin-top:8px; line-height:1.5;">${ad.desc || 'Описание отсутствует'}</p>
-                    <h4 style="font-size:11px; text-transform:uppercase; color:var(--text-muted); margin-top:16px; margin-bottom:6px;">Свойства и логистика</h4>
-                    ${fieldsHTML}
-                    <div style="background:var(--bg-input); padding:12px; border-radius:10px; margin-top:14px;">
-                        <h5>Продавец: ${ad.seller.name}</h5>
-                        <p style="font-size:11px; color:var(--text-muted);">Системный ID автора: ${ad.seller.id}</p>
-                        ${ad.phone ? `<p style="font-size:13px; color:var(--accent); font-weight:700; margin-top:6px;">📞 Телефон: ${ad.phone}</p>` : ''}
-                    </div>
-                </div>
-            `;
-        };
-
-        window.switchHubSubTab = function(sub) {
-            document.getElementById('hubTab-my').classList.toggle('active', sub === 'my');
-            document.getElementById('hubTab-create').classList.toggle('active', sub === 'create');
-            document.getElementById('block-myAdsList').style.display = sub === 'my' ? 'block' : 'none';
-            document.getElementById('block-wizardForm').style.display = sub === 'create' ? 'block' : 'none';
-            if(sub === 'my') window.renderMyAdsGrid(window.MY_ADS_SUB_FILTER);
-        };
-
-        window.renderMyAdsGrid = function(status) {
-            window.MY_ADS_SUB_FILTER = status;
-            document.getElementById('myAdsSub-active').classList.toggle('active', status === 'active');
-            document.getElementById('myAdsSub-moderation').classList.toggle('active', status === 'moderation');
-            
-            const container = document.getElementById('myPersonalAdsGrid');
-            let list = window.GLOBAL_DATABASE.filter(a => a.seller.id === window.CURRENT_SESSION_USER.id && a.status === status);
-            
-            if(list.length === 0) { container.innerHTML = '<p style="grid-column:span 2; text-align:center; padding:20px; color:var(--text-muted);">Объекты отсутствуют</p>'; return; }
-            container.innerHTML = list.map(a => `<div class="ad-item"><div class="ad-img"><img src="${a.images[0]}"></div><div class="ad-price">${a.price.toLocaleString()} сум</div><div class="ad-title">${a.title}</div></div>`).join('');
-        };
-
-        window.selectWizardCategory = function(cat, el) {
-            document.querySelectorAll('#wstep-1 .option-selector-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected'); window.WIZARD_CATEGORY = cat;
-            setTimeout(() => window.wizardNext(), 200);
-        };
-
-        window.simulateMediaUpload = function(slot) {
-            window.WIZARD_MEDIA[slot] = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80";
-            document.getElementById(`us-${slot}`).innerHTML = `<img src="${window.WIZARD_MEDIA[slot]}">`;
-            window.validateWizardDataLive();
-        };
-
-        window.addNewSpecificationRow = function() {
-            const id = Date.now();
-            document.getElementById('dynamicSpecsFieldsContainer').innerHTML += `<div style="display:flex; gap:6px; margin-bottom:8px;" id="r-${id}"><input type="text" class="wk" placeholder="Ключ (например: АКБ)" style="padding:10px;"><input type="text" class="wv" placeholder="Значение" style="padding:10px;"><button class="btn-secondary" style="color:var(--danger);" onclick="document.getElementById('r-${id}').remove()">✕</button></div>`;
-        };
-
-        window.validateWizardDataLive = function() {
-            if(window.WIZARD_STEP === 2) document.getElementById('wbtn-2').disabled = !window.WIZARD_MEDIA.some(m => m !== "");
-            if(window.WIZARD_STEP === 3) {
-                let t = document.getElementById('wiTitle').value.trim();
-                let d = document.getElementById('wiDesc').value.trim();
-                document.getElementById('wbtn-3').disabled = (t.length < 3 || d.length < 5);
-            }
-            if(window.WIZARD_STEP === 5) {
-                let p = document.getElementById('wiPrice').value;
-                let dst = document.getElementById('wiDistrict').value.trim();
-                document.getElementById('wbtn-5').disabled = (!p || dst.length < 2);
-            }
-        };
-
-        window.interceptVipActivationToggle = function(checkbox) {
-            const proState = window.SYSTEM_USERS[window.CURRENT_SESSION_USER.id]?.proExpiry || 0;
-            if(checkbox.checked && (proState === 0 || Date.now() > proState)) {
-                checkbox.checked = false;
-                document.getElementById('wizardProAlertBlock').style.display = "block";
-            } else {
-                document.getElementById('wizardProAlertBlock').style.display = "none";
-            }
-        };
-
-        window.wizardNext = function() {
-            document.getElementById(`wstep-${window.WIZARD_STEP}`).classList.remove('active');
-            window.WIZARD_STEP++;
-            document.getElementById(`wstep-${window.WIZARD_STEP}`).classList.add('active');
-            window.syncWizardProgressLine();
-        };
-
-        window.wizardBack = function() {
-            document.getElementById(`wstep-${window.WIZARD_STEP}`).classList.remove('active');
-            window.WIZARD_STEP--;
-            document.getElementById(`wstep-${window.WIZARD_STEP}`).classList.add('active');
-            window.syncWizardProgressLine();
-        };
-
-        window.syncWizardProgressLine = function() {
-            document.querySelectorAll('.w-tab').forEach((t, i) => t.classList.toggle('active', i < window.WIZARD_STEP));
-            window.validateWizardDataLive();
-        };
-
-        window.submitAdToDatabaseEngine = function() {
-            let customFields = [];
-            document.querySelectorAll('#dynamicSpecsFieldsContainer div').forEach(row => {
-                let k = row.querySelector('.wk')?.value.trim();
-                let v = row.querySelector('.wv')?.value.trim();
-                if(k && v) customFields.push({ k: k, v: v });
-            });
-
-            let newAd = {
-                id: Date.now(),
-                category: window.WIZARD_CATEGORY,
-                title: document.getElementById('wiTitle').value.trim(),
-                price: parseFloat(document.getElementById('wiPrice').value),
-                condition: "used",
-                region: "Ташкент",
-                district: document.getElementById('wiDistrict').value.trim(),
-                phone: window.CURRENT_SESSION_USER.phone,
-                desc: document.getElementById('wiDesc').value.trim(),
-                images: [window.WIZARD_MEDIA[0] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80"],
-                customFields: customFields,
-                seller: { name: window.CURRENT_SESSION_USER.name, id: window.CURRENT_SESSION_USER.id },
-                status: "moderation",
-                vip: document.getElementById('wiVipCheckbox').checked
-            };
-
-            window.GLOBAL_DATABASE.push(newAd);
-            window.saveStateToLocalStorage();
-            document.getElementById('wizardCoreFlowBox').style.display = "none";
-            document.getElementById('wizardPipelineSuccessState').style.display = "block";
-        };
-
-        window.restartWizardInfinitePipeline = function() {
-            document.getElementById('wiTitle').value = ""; document.getElementById('wiDesc').value = "";
-            document.getElementById('wiPrice').value = ""; document.getElementById('wiDistrict').value = "";
-            document.getElementById('wiVipCheckbox').checked = false;
-            document.getElementById('dynamicSpecsFieldsContainer').innerHTML = "";
-            window.WIZARD_MEDIA = ["","","",""];
-            document.querySelectorAll('.uploader-slot').forEach(s => s.innerHTML = "+");
-            window.WIZARD_STEP = 1;
-            
-            document.getElementById('wizardPipelineSuccessState').style.display = "none";
-            document.getElementById('wizardCoreFlowBox').style.display = "block";
-            document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
-            document.getElementById('wstep-1').classList.add('active');
-            window.syncWizardProgressLine();
-        };
-
-        window.triggerProRequestSimulation = function() {
-            window.SYSTEM_USERS[window.CURRENT_SESSION_USER.id].proRequest = "pending";
-            window.saveStateToLocalStorage(); window.syncProfileBillingUiView();
-            alert("Запрос на получение PRO тарифа отправлен менеджеру. Администратор подтвердит подписку вручную.");
-        };
-
-        window.evaluateActiveBillingTiersTimeframe = function() {
-            Object.keys(window.SYSTEM_USERS).forEach(id => {
-                if(window.SYSTEM_USERS[id].proExpiry > 0 && Date.now() > window.SYSTEM_USERS[id].proExpiry) {
-                    window.SYSTEM_USERS[id].proExpiry = 0;
-                    window.SYSTEM_USERS[id].proRequest = "none";
-                }
-            });
-            window.saveStateToLocalStorage();
-        };
-
-        window.syncProfileBillingUiView = function() {
-            window.evaluateActiveBillingTiersTimeframe();
-            const user = window.SYSTEM_USERS[window.CURRENT_SESSION_USER.id];
-            if(!user) return;
-
-            document.getElementById('profUserFullname').innerText = user.name;
-            document.getElementById('profUserGeneratedId').innerText = window.CURRENT_SESSION_USER.id;
-            
-            const badge = document.getElementById('profBillingStatusBadge');
-            const timer = document.getElementById('profBillingTimerLabel');
-            const area = document.getElementById('proActionAreaBlock');
-
-            if(user.proExpiry > 0) {
-                const days = Math.ceil((user.proExpiry - Date.now()) / (1000 * 60 * 60 * 24));
-                badge.innerText = "ТАРИФ СИСТЕМЫ: PRO BUSINESS"; badge.style.color = "var(--warning)";
-                timer.innerText = `До истечения PRO лицензии: ${days} дней`;
-                area.innerHTML = `<p style="color:var(--success); font-weight:700; text-align:center;">✓ Безлимитные возможности подключены</p>`;
-            } else {
-                if(user.proRequest === 'pending') {
-                    badge.innerText = "СТАТУС: ПРОВЕРКА ТРАНЗАКЦИИ"; badge.style.color = "var(--warning)";
-                    timer.innerText = "Ожидание подтверждения от менеджера...";
-                    area.innerHTML = `<p style="color:var(--warning); text-align:center; font-size:12px;">⏳ Платёж проверяется финансовым отделом</p>`;
-                } else {
-                    badge.innerText = "ТАРИФ СИСТЕМЫ: LITE BASE"; badge.style.color = "var(--text-muted)";
-                    timer.innerText = "Тариф: LITE (Ограниченный)";
-                    area.innerHTML = `<button class="btn-secondary" style="width:100%; border-color:var(--warning); color:var(--warning);" onclick="window.triggerProRequestSimulation()">Связаться с менеджером для оплаты PRO</button>`;
-                }
-            }
-        };
-
-        window.switchAdminSubTab = function(tab) {
-            window.ADMIN_SUB_TAB = tab;
-            document.querySelectorAll('#screen-admin .tab-node').forEach(t => t.classList.remove('active'));
-            document.getElementById(`admTab-${tab}`).classList.add('active');
-            window.renderAdminDashboardView();
-        };
-
-        window.renderAdminDashboardView = function() {
-            const sellersCount = Object.keys(window.SYSTEM_USERS).length;
-            let proUsersCount = Object.values(window.SYSTEM_USERS).filter(u => u.proExpiry > Date.now()).length;
-            
-            document.getElementById('admStatSellersCount').innerText = sellersCount;
-            document.getElementById('admStatRevenueCounter').innerText = (proUsersCount * 95000).toLocaleString() + " UZS";
-
-            const container = document.getElementById('adminDynamicDataView');
-            container.innerHTML = "";
-
-            if(window.ADMIN_SUB_TAB === 'moderation') {
-                let pending = window.GLOBAL_DATABASE.filter(a => a.status === 'moderation');
-                if(pending.length === 0) { container.innerHTML = '<p style="font-size:12px; color:var(--text-muted); padding:10px;">Очередь модерации пуста.</p>'; return; }
-                
-                container.innerHTML = pending.map(a => `
-                    <div class="card-box" style="background:var(--bg-input);">
-                        <h5>${a.title}</h5>
-                        <p style="color:var(--success); font-weight:700; margin-top:2px;">${a.price.toLocaleString()} сум</p>
-                        <div style="display:flex; gap:10px; margin-top:10px;">
-                            <button class="btn-primary" style="background:var(--success); padding:8px; font-size:11px;" onclick="window.adminApproveAd(${a.id})">Одобрить</button>
-                            <button class="btn-primary" style="background:var(--danger); padding:8px; font-size:11px;" onclick="window.adminRejectAd(${a.id})">Отклонить</button>
-                        </div>
-                    </div>
-                `).join('');
-            } else if(window.ADMIN_SUB_TAB === 'billing') {
-                let requests = Object.keys(window.SYSTEM_USERS).filter(id => window.SYSTEM_USERS[id].proRequest === 'pending');
-                if(requests.length === 0) { container.innerHTML = '<p style="font-size:12px; color:var(--text-muted); padding:10px;">Запросы на активацию PRO отсутствуют.</p>'; return; }
-                
-                container.innerHTML = requests.map(id => `
-                    <div class="card-box" style="background:var(--bg-input);">
-                        <h5>Запрос тарифа PRO от ID: ${id}</h5>
-                        <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">Пользователь: ${window.SYSTEM_USERS[id].name} (${window.SYSTEM_USERS[id].phone})</p>
-                        <button class="btn-primary" style="background:var(--success); margin-top:8px; padding:8px; font-size:11px;" onclick="window.adminApproveProSubscription('${id}')">Подтвердить получение оплаты</button>
-                    </div>
-                `).join('');
-            } else {
-                let rows = Object.keys(window.SYSTEM_USERS).map(id => {
-                    let u = window.SYSTEM_USERS[id];
-                    let plan = u.proExpiry > Date.now() ? "PRO" : "Lite";
-                    return `<tr><td>${id}</td><td>${u.name}</td><td>${plan}</td></tr>`;
-                }).join('');
-
-                container.innerHTML = `
-                    <div class="card-box">
-                        <table class="admin-data-table">
-                            <thead><tr><th>ID</th><th>Имя продавца</th><th>Тариф</th></tr></thead>
-                            <tbody>${rows || '<tr><td colspan="3">Пользователей нет</td></tr>'}</tbody>
-                        </table>
-                    </div>
-                `;
-            }
-        };
-
-        window.adminApproveAd = function(id) { window.GLOBAL_DATABASE = window.GLOBAL_DATABASE.map(a => { if(a.id===id) a.status='active'; return a; }); window.saveStateToLocalStorage(); window.renderAdminDashboardView(); window.applyCatalogFiltersEngine(); };
-        window.adminRejectAd = function(id) { window.GLOBAL_DATABASE = window.GLOBAL_DATABASE.filter(a => a.id!==id); window.saveStateToLocalStorage(); window.renderAdminDashboardView(); };
-        window.adminApproveProSubscription = function(id) { window.SYSTEM_USERS[id].proExpiry = Date.now() + (30 * 24 * 60 * 60 * 1000); window.SYSTEM_USERS[id].proRequest = "approved"; window.saveStateToLocalStorage(); window.renderAdminDashboardView(); };
-
-        window.toggleFaqNode = function(el) { const ans = el.querySelector('.faq-a'); ans.style.display = ans.style.display === 'block' ? 'none' : 'block'; };
-        
-        window.navTo = function(screenId, btnNode) {
-            document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(`screen-${screenId}`).classList.add('active');
-            if(btnNode) { document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); btnNode.classList.add('active'); }
-            document.getElementById('globalAppNavbar').style.display = (screenId === 'auth' || screenId === 'details' || screenId === 'admin') ? 'none' : 'flex';
-            if(screenId === 'profile') window.syncProfileBillingUiView();
-            if(screenId === 'ads-hub') window.switchHubSubTab('my');
-        };
-    </script>
-
-    // Работа с реестром пользователей
-const UserRegistry = {
-    save: (id, data) => localStorage.setItem(`user_${id}`, JSON.stringify(data)),
-    get: (id) => JSON.parse(localStorage.getItem(`user_${id}`)),
-    exists: (id) => !!localStorage.getItem(`user_${id}`)
-};
-
-    window.onload = () => {
-    // Делегируем клики на уровне body, чтобы избежать конфликтов SVG-иконок
-    document.body.addEventListener('click', (e) => {
-        if (e.target.matches('.nav-item')) {
-            const screen = e.target.getAttribute('data-screen');
-            switchScreen(screen);
+        logout: function() {
+            localStorage.removeItem('session');
+            location.reload();
         }
-    });
-};
-
-    function renderAdminPanel() {
-    const isAdmin = localStorage.getItem('is_admin') === 'true';
-    if (!isAdmin) return alert("Доступ запрещен!");
-    
-    // Рендеринг всех объявлений со статусом 'moderation'
-    const ads = JSON.parse(localStorage.getItem('all_ads') || '[]');
-    const pending = ads.filter(a => a.status === 'moderation');
-    
-    // ... логика отрисовки списка для одобрения ...
-}
-    
+    };
+</script>
 </body>
 </html>
