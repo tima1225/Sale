@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TIA - Вход</title>
+    <title>TIA Вход</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { background: #060709; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; }
@@ -13,34 +13,37 @@
 </head>
 <body>
 <div class="box">
-    <h2 style="text-align:center;">TIA ВХОД</h2>
+    <h2>ВХОД</h2>
     <input type="text" id="id" placeholder="ID (например: TIA-00000)">
     <input type="password" id="pass" placeholder="Пароль">
-    <button onclick="login()">ВОЙТИ</button>
+    <button id="loginBtn">ВОЙТИ</button>
+    <p id="status" style="color: red; font-size: 12px;"></p>
 </div>
 
 <script>
-    // ВСТАВЬТЕ СЮДА ВАШИ ДАННЫЕ
-    const supabase = supabase.createClient('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFydG1vZmhoamZpc3djdW11ZXFyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDIyNDEzNiwiZXhwIjoyMDk1ODAwMTM2fQ.c9hSZnm7M5BQCYz1yI-hVafsOGIMyyO_4FxH1nHH2JA', 'sb_publishable__rtUl4lTn3B592_IvbALKA_2OqlUkO3');
+    const supabase = supabase.createClient('ВАШ_URL', 'ВАШ_KEY');
 
-    async function login() {
+    document.getElementById('loginBtn').addEventListener('click', async () => {
         const id = document.getElementById('id').value;
         const pass = document.getElementById('pass').value;
+        const status = document.getElementById('status');
 
         const { data, error } = await supabase
             .from('users')
             .select('*')
             .eq('id', id)
             .eq('password_hash', pass)
-            .single();
+            .maybeSingle();
 
-        if (data) {
+        if (error) {
+            status.innerText = "Ошибка: " + error.message;
+        } else if (data) {
             localStorage.setItem('user_session', JSON.stringify(data));
             window.location.href = 'app.html';
         } else {
-            alert("Ошибка: Неверный ID или пароль");
+            status.innerText = "Неверный ID или пароль";
         }
-    }
+    });
 </script>
 </body>
 </html>
