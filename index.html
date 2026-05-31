@@ -3,62 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>TIA - Premium Marketplace</title>
+    <title>TIA - Premium Modern Marketplace</title>
     <style>
-        /* ИМПОРТ ШРИФТОВ */
+        /* ИМПОРТ ФУТУРИСТИЧНЫХ ШРИФТОВ */
         @import url('https://fonts.cdnfonts.com/css/brigends-king');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
 
         * {
             box-sizing: border-box;
-            /* Century для основного текста */
-            font-family: 'Century Gothic', 'Century', 'Georgia', serif;
             margin: 0; padding: 0;
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* БАЗОВАЯ ПАЛИТРА СОВРЕМЕННОГО ПРИЛОЖЕНИЯ */
         :root {
-            --bg-main: #06070a;
-            --bg-card: #0d0f16;
-            --bg-input: #151822;
+            --bg-main: #050608;
+            --bg-card: #0d0f14;
+            --bg-input: #151820;
             --text-main: #ffffff;
             --text-muted: #6b7280;
-            --border: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.06);
             --accent: #00d2ff;
             --accent-gradient: linear-gradient(135deg, #2f80ed 0%, #00d2ff 100%);
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --shadow: rgba(0, 0, 0, 0.4);
-            --nav-bg: rgba(13, 15, 22, 0.85);
+            --shadow: rgba(0, 0, 0, 0.6);
+            --nav-bg: rgba(13, 15, 20, 0.85);
         }
 
         [data-theme="light"] {
-            --bg-main: #f3f4f6;
+            --bg-main: #f4f5f7;
             --bg-card: #ffffff;
             --bg-input: #e5e7eb;
             --text-main: #111827;
             --text-muted: #6b7280;
             --border: rgba(0, 0, 0, 0.08);
-            --shadow: rgba(0, 0, 0, 0.04);
+            --shadow: rgba(0, 0, 0, 0.05);
             --nav-bg: rgba(255, 255, 255, 0.9);
         }
 
         body {
-            background-color: var(--bg-main); color: var(--text-main);
-            padding: 16px 14px calc(95px + env(safe-area-inset-bottom)) 14px;
+            background-color: var(--bg-main); 
+            color: var(--text-main);
+            /* Основной текст - читаемый геометрический Montserrat */
+            font-family: 'Montserrat', sans-serif; 
+            padding: 16px 14px calc(110px + env(safe-area-inset-bottom)) 14px;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Brigends для Логотипов и Заголовков */
-        .brand-font {
+        /* ФИРМЕННЫЙ ШРИФТ BRIGENDS ДЛЯ АКЦЕНТОВ */
+        h1, h2, h3, h4, .brand-font, .btn-primary, .nav-item span {
             font-family: 'Brigends King', sans-serif;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: normal;
         }
 
+        /* Экраны */
         .app-screen { display: none; width: 100%; max-width: 600px; margin: 0 auto; }
-        .app-screen.active { display: block; animation: fadeUp 0.3s ease; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .app-screen.active { display: block; animation: fadeUp 0.35s ease forwards; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Верхняя плажка */
         .top-header {
@@ -66,93 +71,107 @@
             padding: 16px 20px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 20px var(--shadow);
         }
-        .header-logo { font-size: 24px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header-subtitle { font-size: 10px; font-weight: bold; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; }
+        .header-logo { font-size: 26px; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-subtitle { font-size: 9px; font-weight: 800; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; font-family: 'Montserrat', sans-serif; }
 
-        /* Блоки и карточки */
+        /* Карточки и Инпуты */
         .card-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 14px; box-shadow: 0 4px 16px var(--shadow); }
-        .input-group { margin-bottom: 14px; }
-        .input-group label { display: block; font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; }
-        .input-group input, .input-group select, .input-group textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); padding: 14px; border-radius: 10px; font-size: 14px; outline: none; transition: border 0.2s; }
-        .input-group input:focus { border-color: var(--accent); }
+        .input-group { margin-bottom: 16px; }
+        .input-group label { display: block; font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .input-group input, .input-group select, .input-group textarea { width: 100%; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); padding: 16px; border-radius: 12px; font-size: 14px; outline: none; transition: border 0.2s; font-family: 'Montserrat', sans-serif; font-weight: 600;}
+        .input-group input:focus, .input-group textarea:focus { border-color: var(--accent); }
 
         /* Кнопки */
-        .btn-primary { background: var(--accent-gradient); color: #fff; border: none; padding: 16px; border-radius: 10px; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; width: 100%; cursor: pointer; transition: transform 0.1s; }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-primary:disabled { background: var(--bg-input); color: var(--text-muted); opacity: 0.7; cursor: not-allowed; }
-        .btn-secondary { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .btn-primary { 
+            background: var(--accent-gradient); color: #fff; border: none; padding: 18px; 
+            border-radius: 12px; font-size: 14px; width: 100%; cursor: pointer; 
+            transition: transform 0.1s, opacity 0.2s; 
+        }
+        .btn-primary:active { transform: scale(0.97); }
+        .btn-primary:disabled { background: var(--bg-input); color: var(--text-muted); opacity: 0.5; cursor: not-allowed; pointer-events: none;}
+        
+        .btn-secondary { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border); padding: 12px 18px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: 'Montserrat', sans-serif;}
 
         /* Сетка объявлений */
         .grid-ads { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .ad-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 10px; cursor: pointer; position: relative; }
+        .ad-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 10px; position: relative; box-shadow: 0 4px 12px var(--shadow);}
         .ad-img { width: 100%; height: 140px; background: var(--bg-input); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
         .ad-img img { width: 100%; height: 100%; object-fit: cover; }
-        .ad-price { font-size: 16px; font-weight: bold; color: var(--success); margin-bottom: 4px; }
-        .ad-title { font-size: 13px; line-height: 1.4; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .vip-tag { position: absolute; top: 16px; left: 16px; background: var(--warning); color: #000; font-size: 9px; font-weight: bold; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; }
+        .ad-price { font-size: 16px; font-weight: 800; color: var(--success); margin-bottom: 6px; }
+        .ad-title { font-size: 12px; line-height: 1.4; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-weight: 600;}
+        .vip-tag { position: absolute; top: 16px; left: 16px; background: var(--warning); color: #000; font-size: 9px; font-weight: 800; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; font-family: 'Montserrat', sans-serif;}
 
-        /* Пошаговый мастер */
-        .wizard-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-        .w-tab { flex: 1; height: 4px; background: var(--bg-input); border-radius: 2px; }
+        /* Мастер создания */
+        .wizard-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+        .w-tab { flex: 1; height: 4px; background: var(--bg-input); border-radius: 2px; transition: background 0.3s; }
         .w-tab.active { background: var(--accent); }
         .wizard-step { display: none; }
         .wizard-step.active { display: block; animation: fadeUp 0.3s; }
 
-        /* НИЖНИЙ НАВБАР С ПРЕМИУМ-ИКОНКАМИ */
+        /* ИЗЯЩНАЯ НАВИГАЦИЯ ВНИЗУ */
         .bottom-nav {
             position: fixed; bottom: 16px; left: 16px; right: 16px;
-            background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            background: var(--nav-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--border); border-radius: 24px;
             display: flex; justify-content: space-around; align-items: center;
             padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6); z-index: 1000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 1000;
         }
         .nav-item {
             background: transparent; border: none; color: var(--text-muted);
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
             cursor: pointer; width: 25%; transition: all 0.3s ease;
         }
+        /* Блокируем клики по внутренним элементам, чтобы работал onclick самой кнопки */
+        .nav-item * { pointer-events: none; }
+        
         .nav-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: all 0.3s ease; }
-        .nav-item span { font-size: 9px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0.8; transition: all 0.3s ease; }
+        .nav-item span { font-size: 10px; letter-spacing: 1px; opacity: 0.7; transition: all 0.3s ease; }
         
         .nav-item.active { color: var(--accent); }
         .nav-item.active svg { transform: translateY(-2px); stroke-width: 2.5; }
         .nav-item.active span { opacity: 1; transform: translateY(-1px); }
-
     </style>
 </head>
 <body data-theme="dark">
 
-    <div id="screen-auth" class="app-screen active" style="margin-top: 10vh;">
+    <!-- 0. ЭКРАН АВТОРИЗАЦИИ -->
+    <div id="screen-auth" class="app-screen active" style="margin-top: 8vh;">
         <div style="text-align:center; margin-bottom: 40px;">
-            <div class="brand-font header-logo" style="font-size: 64px;">TIA</div>
-            <div class="header-subtitle" style="margin-top: 8px;">Система управления объявлениями</div>
+            <div class="brand-font header-logo" style="font-size: 72px;">TIA</div>
+            <div class="header-subtitle" style="margin-top: 10px;">Marketplace Engine</div>
         </div>
         
         <div class="card-box">
-            <h3 style="font-size: 16px; text-align:center; margin-bottom: 16px;">Регистрация профиля</h3>
+            <h3 style="font-size: 18px; text-align:center; margin-bottom: 20px;">Регистрация ID</h3>
             <div class="input-group">
-                <label>Придумайте пароль доступа</label>
+                <label>Придумайте пароль</label>
                 <input type="password" id="authPassword" placeholder="Минимум 3 символа">
             </div>
-            <button class="btn-primary" onclick="executeRegistration()">Войти в систему</button>
-            <div style="margin-top:20px; text-align:center; padding-top:16px; border-top:1px solid var(--border);">
-                <button class="btn-secondary" style="color:var(--warning); border-color:var(--warning);" onclick="executeAdminAuth()">Вход для Администратора</button>
+            <!-- Обработчик подключен напрямую -->
+            <button class="btn-primary" onclick="window.executeRegistration()">Создать профиль</button>
+            
+            <div style="margin-top:24px; text-align:center; padding-top:20px; border-top:1px solid var(--border);">
+                <button class="btn-secondary" style="color:var(--warning); border-color:var(--warning); width:100%;" onclick="window.executeAdminAuth()">Вход для Администратора</button>
             </div>
         </div>
     </div>
 
+    <!-- 1. ЭКРАН ЛЕНТЫ ОБЪЯВЛЕНИЙ -->
     <div id="screen-feed" class="app-screen">
         <div class="top-header">
             <div class="brand-font header-logo">TIA</div>
-            <button class="btn-secondary" onclick="toggleTheme()">🌓 Тема</button>
+            <button class="btn-secondary" onclick="window.toggleTheme()">🌓 Режим</button>
         </div>
         <div class="input-group">
-            <input type="text" placeholder="🔍 Поиск по объявлениям..." oninput="filterAds(this.value)">
+            <input type="text" placeholder="Поиск по объявлениям..." oninput="window.filterAds(this.value)">
         </div>
-        <div class="grid-ads" id="feedGrid"></div>
+        <div class="grid-ads" id="feedGrid">
+            <!-- Сюда рендерятся объявления -->
+        </div>
     </div>
 
+    <!-- 2. ЭКРАН СОЗДАНИЯ (МАСТЕР) -->
     <div id="screen-create" class="app-screen">
         <div class="top-header">
             <div class="brand-font header-logo">TIA</div>
@@ -167,227 +186,330 @@
             </div>
 
             <div class="wizard-step active" id="step-1">
-                <h3 style="margin-bottom: 16px;">Шаг 1: Основная информация</h3>
-                <div class="input-group"><label>Название товара *</label><input type="text" id="wTitle" placeholder="Например: iPhone 15 Pro" oninput="validateWizard()"></div>
-                <div class="input-group"><label>Цена (Сум) *</label><input type="number" id="wPrice" placeholder="0" oninput="validateWizard()"></div>
-                <button class="btn-primary" id="btnNext1" disabled onclick="goStep(2)">Далее</button>
+                <h3 style="margin-bottom: 20px;">Шаг 1: Данные</h3>
+                <div class="input-group"><label>Название товара *</label><input type="text" id="wTitle" placeholder="iPhone 15 Pro" oninput="window.validateWizard()"></div>
+                <div class="input-group"><label>Цена (Сум) *</label><input type="number" id="wPrice" placeholder="0" oninput="window.validateWizard()"></div>
+                <button class="btn-primary" id="btnNext1" disabled onclick="window.goStep(2)">Далее</button>
             </div>
 
             <div class="wizard-step" id="step-2">
-                <h3 style="margin-bottom: 16px;">Шаг 2: Детали и Описание</h3>
-                <div class="input-group"><label>Описание товара *</label><textarea id="wDesc" rows="4" placeholder="Подробности..." oninput="validateWizard()"></textarea></div>
-                <div class="input-group"><label>Район *</label><input type="text" id="wDistrict" placeholder="Укажите район" oninput="validateWizard()"></div>
+                <h3 style="margin-bottom: 20px;">Шаг 2: Детали</h3>
+                <div class="input-group"><label>Описание товара *</label><textarea id="wDesc" rows="4" placeholder="Подробности..." oninput="window.validateWizard()"></textarea></div>
+                <div class="input-group"><label>Район *</label><input type="text" id="wDistrict" placeholder="Укажите район" oninput="window.validateWizard()"></div>
                 <div style="display:flex; gap:10px;">
-                    <button class="btn-secondary" onclick="goStep(1)">Назад</button>
-                    <button class="btn-primary" id="btnNext2" disabled onclick="goStep(3)">Далее</button>
+                    <button class="btn-secondary" style="width:40%;" onclick="window.goStep(1)">Назад</button>
+                    <button class="btn-primary" style="width:60%;" id="btnNext2" disabled onclick="window.goStep(3)">Далее</button>
                 </div>
             </div>
 
             <div class="wizard-step" id="step-3">
-                <h3 style="margin-bottom: 16px;">Шаг 3: Монетизация</h3>
-                <div class="input-group" style="background: rgba(255,159,10,0.1); padding: 16px; border-radius: 10px; border: 1px solid var(--warning);">
-                    <label style="display:flex; align-items:center; gap:8px; color:var(--text-main); font-size:13px; margin:0;">
-                        <input type="checkbox" id="wVip"> 🚀 Сделать TOP VIP
+                <h3 style="margin-bottom: 20px;">Шаг 3: Опции</h3>
+                <div class="input-group" style="background: rgba(255,159,10,0.1); padding: 16px; border-radius: 12px; border: 1px solid var(--warning);">
+                    <label style="display:flex; align-items:center; gap:10px; color:var(--text-main); font-size:14px; margin:0; font-family:'Montserrat',sans-serif; font-weight:800;">
+                        <input type="checkbox" id="wVip" style="width:20px; height:20px;"> 🚀 Сделать TOP VIP
                     </label>
-                    <p style="font-size:10px; color:var(--warning); margin-top:8px;">Внимание: Функция VIP доступна только для пользователей с активированным тарифом PRO.</p>
+                    <p style="font-size:10px; color:var(--warning); margin-top:8px; font-weight:bold;">Доступно только с тарифом PRO.</p>
                 </div>
                 <div style="display:flex; gap:10px;">
-                    <button class="btn-secondary" onclick="goStep(2)">Назад</button>
-                    <button class="btn-primary" style="background:var(--success);" onclick="publishAd()">Опубликовать</button>
+                    <button class="btn-secondary" style="width:40%;" onclick="window.goStep(2)">Назад</button>
+                    <button class="btn-primary" style="width:60%; background:var(--success);" onclick="window.publishAd()">Отправить</button>
                 </div>
             </div>
         </div>
 
         <div class="card-box" id="successBox" style="display: none; text-align: center;">
-            <h3 style="color: var(--success); margin-bottom: 8px;">Успешно!</h3>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom: 16px;">Объявление отправлено модератору.</p>
-            <button class="btn-primary" onclick="resetWizard()">Разместить еще одно</button>
+            <h3 style="color: var(--success); margin-bottom: 12px;">Успешно!</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom: 24px;">Объявление отправлено модератору.</p>
+            <button class="btn-primary" onclick="window.resetWizard()">Разместить еще одно</button>
         </div>
     </div>
 
+    <!-- 3. ЭКРАН ПРОФИЛЯ -->
     <div id="screen-profile" class="app-screen">
         <div class="top-header">
             <div class="brand-font header-logo">TIA</div>
-            <button class="btn-secondary" style="color:var(--danger); border-color:var(--danger);" onclick="logout()">Выход</button>
+            <button class="btn-secondary" style="color:var(--danger); border-color:var(--danger);" onclick="window.logout()">Выход</button>
         </div>
 
         <div class="card-box" style="display:flex; align-items:center; gap:16px;">
-            <div style="width: 60px; height: 60px; background: var(--bg-input); border-radius: 50%; display:flex; align-items:center; justify-content:center; border: 2px dashed var(--border);">
-                <span style="font-size:10px; color:var(--text-muted);">ФОТО</span>
+            <div style="width: 64px; height: 64px; background: var(--bg-input); border-radius: 50%; display:flex; align-items:center; justify-content:center; border: 2px dashed var(--border);">
+                <span style="font-size:10px; color:var(--text-muted); font-weight:bold;">ФОТО</span>
             </div>
             <div>
-                <h3 id="profName">Пользователь</h3>
-                <p style="font-size: 11px; color:var(--text-muted); margin-top:4px;">ID: <span id="profId"></span></p>
-                <p style="font-size: 10px; font-weight:bold; margin-top:4px; color:var(--accent);" id="profStatus">LITE ТАРИФ</p>
+                <h3>Ваш Профиль</h3>
+                <p style="font-size: 12px; color:var(--text-muted); margin-top:6px; font-weight:bold;">ID: <span id="profId" style="color:#fff;"></span></p>
+                <p style="font-size: 10px; font-weight:800; margin-top:6px; color:var(--accent); text-transform:uppercase;" id="profStatus">Базовый аккаунт</p>
             </div>
         </div>
 
         <div class="card-box" style="border-left: 4px solid var(--warning);">
-            <h4>PRO Тариф</h4>
-            <p style="font-size: 11px; color:var(--text-muted); margin: 8px 0;">Безлимитные публикации и доступ к VIP.</p>
-            <button class="btn-secondary" style="width: 100%; border-color:var(--warning); color:var(--warning);" onclick="requestPro()">Связаться с менеджером для PRO</button>
+            <h4 style="margin-bottom:8px;">Получить PRO Тариф</h4>
+            <p style="font-size: 12px; color:var(--text-muted); margin-bottom: 16px; font-weight:600; line-height:1.4;">Снимите лимиты, получите доступ к VIP продвижению.</p>
+            <button class="btn-secondary" style="width: 100%; border-color:var(--warning); color:var(--warning); padding:16px;" onclick="window.requestPro()">Связаться с менеджером</button>
         </div>
     </div>
 
+    <!-- 4. ЭКРАН АДМИНА -->
     <div id="screen-admin" class="app-screen">
         <div class="top-header">
             <div class="brand-font header-logo" style="color:var(--danger);">ADMIN</div>
-            <button class="btn-secondary" onclick="logout()">Выйти</button>
+            <button class="btn-secondary" onclick="window.logout()">Выйти</button>
         </div>
-        <div id="adminDataContainer"></div>
+        <div class="card-box" id="adminDataContainer">
+            <!-- Рендер модерации -->
+        </div>
     </div>
 
+    <!-- НАВИГАЦИОННОЕ МЕНЮ (ПОЛНОСТЬЮ РАБОЧИЕ КНОПКИ) -->
     <div class="bottom-nav" id="appNavbar" style="display: none;">
-        <button class="nav-item active" onclick="navTo('feed', this)">
+        <button class="nav-item active" onclick="window.navTo('feed', this)">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             <span>Лента</span>
         </button>
-        <button class="nav-item" onclick="navTo('create', this)">
-            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"></path></svg>
-            <span>Новое</span>
+        <button class="nav-item" onclick="window.navTo('create', this)">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Разместить</span>
         </button>
-        <button class="nav-item" onclick="navTo('profile', this)">
+        <button class="nav-item" onclick="window.navTo('profile', this)">
             <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             <span>Профиль</span>
         </button>
     </div>
 
     <script>
-        // Имитация связи с Backend Python
-        let currentUser = null;
-        let isPro = false;
-        let adsDb = [
-            { id: 1, title: "Apple MacBook M3 Pro", price: 28500000, img: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&q=80", vip: true, status: "active" }
+        // Глобальные переменные состояния
+        window.currentUser = null;
+        window.isPro = false;
+        window.currentStep = 1;
+        
+        // Симуляция базы данных объявлений
+        window.adsDb = [
+            { 
+                id: 1, 
+                title: "Apple MacBook M3 Pro Max", 
+                price: 28500000, 
+                img: "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=400&q=80", 
+                vip: true, 
+                status: "active" 
+            },
+            { 
+                id: 2, 
+                title: "Sony PlayStation 5 Slim", 
+                price: 6500000, 
+                img: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400&q=80", 
+                vip: false, 
+                status: "active" 
+            }
         ];
 
-        function executeRegistration() {
+        // 1. АВТОРИЗАЦИЯ И РЕГИСТРАЦИЯ
+        window.executeRegistration = function() {
             const pass = document.getElementById('authPassword').value;
-            if(pass.length < 3) return alert("Пароль от 3 символов");
+            if(pass.length < 3) {
+                alert("Пароль должен содержать минимум 3 символа");
+                return;
+            }
             
-            // Генерация ID
-            currentUser = "TIA-" + Math.floor(Math.random() * 90000 + 10000);
-            document.getElementById('profId').innerText = currentUser;
+            // Генерация красивого ID
+            window.currentUser = "TIA-" + Math.floor(Math.random() * 90000 + 10000);
+            document.getElementById('profId').innerText = window.currentUser;
             
+            // Переход в приложение
             document.getElementById('screen-auth').classList.remove('active');
             document.getElementById('appNavbar').style.display = "flex";
-            navTo('feed', document.querySelector('.nav-item'));
-        }
+            
+            // Активируем кнопку "Лента"
+            const feedBtn = document.querySelectorAll('.nav-item')[0];
+            window.navTo('feed', feedBtn);
+        };
 
-        function executeAdminAuth() {
-            if(prompt("Пароль (admin123):") === "admin123") {
+        // 2. ВХОД АДМИНИСТРАТОРА
+        window.executeAdminAuth = function() {
+            const pass = prompt("Введите пароль Администратора (admin123):");
+            if(pass === "admin123") {
                 document.getElementById('screen-auth').classList.remove('active');
-                navTo('admin');
-                renderAdmin();
+                window.navTo('admin');
+                window.renderAdmin();
+            } else if (pass !== null) {
+                alert("Неверный пароль!");
             }
-        }
+        };
 
-        function toggleTheme() {
-            document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        }
+        // 3. ПЕРЕКЛЮЧЕНИЕ ТЕМЫ
+        window.toggleTheme = function() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+            }
+        };
 
-        function navTo(screenId, btnElement = null) {
+        // 4. НАВИГАЦИЯ НИЖНЕГО МЕНЮ
+        window.navTo = function(screenId, btnElement = null) {
+            // Скрываем все экраны
             document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+            // Показываем нужный
             document.getElementById(`screen-${screenId}`).classList.add('active');
             
+            // Обновляем визуальное состояние кнопок меню
             if(btnElement) {
                 document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
                 btnElement.classList.add('active');
             }
-            if(screenId === 'feed') renderFeed();
-        }
 
-        function renderFeed() {
+            // Если перешли в ленту - рендерим товары
+            if(screenId === 'feed') {
+                window.renderFeed();
+            }
+        };
+
+        // 5. РЕНДЕР ЛЕНТЫ ОБЪЯВЛЕНИЙ
+        window.renderFeed = function(searchQuery = "") {
             const grid = document.getElementById('feedGrid');
-            const activeAds = adsDb.filter(a => a.status === 'active');
+            let activeAds = window.adsDb.filter(a => a.status === 'active');
             
+            if(searchQuery) {
+                activeAds = activeAds.filter(a => a.title.toLowerCase().includes(searchQuery.toLowerCase()));
+            }
+            
+            if(activeAds.length === 0) {
+                grid.innerHTML = `<p style="grid-column:span 2; text-align:center; color:var(--text-muted); font-size:12px; padding:20px;">Ничего не найдено</p>`;
+                return;
+            }
+
             grid.innerHTML = activeAds.map(ad => `
                 <div class="ad-item">
                     ${ad.vip ? `<div class="vip-tag">TOP VIP</div>` : ''}
-                    <div class="ad-img"><img src="${ad.img}"></div>
-                    <div class="ad-price">${ad.price.toLocaleString()} UZS</div>
+                    <div class="ad-img"><img src="${ad.img}" alt="Product"></div>
+                    <div class="ad-price">${ad.price.toLocaleString('ru-RU')} UZS</div>
                     <div class="ad-title">${ad.title}</div>
                 </div>
             `).join('');
-        }
+        };
 
-        // Логика пошагового мастера (Размещение)
-        let currentStep = 1;
-        function goStep(step) {
+        window.filterAds = function(query) {
+            window.renderFeed(query);
+        };
+
+        // 6. ЛОГИКА СОЗДАНИЯ ОБЪЯВЛЕНИЯ (МАСТЕР)
+        window.goStep = function(step) {
+            // Управление шагами
             document.querySelectorAll('.wizard-step').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.w-tab').forEach((el, idx) => el.classList.toggle('active', idx < step));
             document.getElementById(`step-${step}`).classList.add('active');
-            currentStep = step;
-        }
-
-        function validateWizard() {
-            const t = document.getElementById('wTitle').value;
-            const p = document.getElementById('wPrice').value;
-            document.getElementById('btnNext1').disabled = !(t.length > 2 && p.length > 0);
             
-            const d = document.getElementById('wDesc').value;
-            const dist = document.getElementById('wDistrict').value;
-            document.getElementById('btnNext2').disabled = !(d.length > 5 && dist.length > 2);
-        }
+            // Управление верхними индикаторами прогресса
+            document.querySelectorAll('.w-tab').forEach((el, idx) => {
+                if(idx < step) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+            window.currentStep = step;
+        };
 
-        function publishAd() {
-            if(document.getElementById('wVip').checked && !isPro) {
-                return alert("Опция VIP доступна только для тарифа PRO. Оставьте заявку в профиле.");
+        window.validateWizard = function() {
+            // Валидация Шага 1
+            const title = document.getElementById('wTitle').value.trim();
+            const price = document.getElementById('wPrice').value.trim();
+            document.getElementById('btnNext1').disabled = !(title.length >= 3 && price.length > 0);
+            
+            // Валидация Шага 2
+            const desc = document.getElementById('wDesc').value.trim();
+            const dist = document.getElementById('wDistrict').value.trim();
+            document.getElementById('btnNext2').disabled = !(desc.length >= 5 && dist.length >= 2);
+        };
+
+        window.publishAd = function() {
+            const isVipChecked = document.getElementById('wVip').checked;
+            
+            if(isVipChecked && !window.isPro) {
+                alert("Ошибка: Опция TOP VIP доступна только для пользователей с тарифом PRO. Обратитесь к менеджеру в профиле.");
+                document.getElementById('wVip').checked = false;
+                return;
             }
 
-            adsDb.push({
+            // Добавляем объявление в базу на модерацию
+            window.adsDb.push({
                 id: Date.now(),
                 title: document.getElementById('wTitle').value,
                 price: parseFloat(document.getElementById('wPrice').value),
                 img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80",
-                vip: document.getElementById('wVip').checked,
+                vip: isVipChecked,
                 status: "moderation"
             });
 
+            // Показываем окно успеха
             document.getElementById('wizardContainer').style.display = "none";
             document.getElementById('successBox').style.display = "block";
-        }
+        };
 
-        function resetWizard() {
-            document.getElementById('wTitle').value = ''; document.getElementById('wPrice').value = '';
-            document.getElementById('wDesc').value = ''; document.getElementById('wDistrict').value = '';
+        window.resetWizard = function() {
+            // Очищаем инпуты
+            document.getElementById('wTitle').value = '';
+            document.getElementById('wPrice').value = '';
+            document.getElementById('wDesc').value = '';
+            document.getElementById('wDistrict').value = '';
             document.getElementById('wVip').checked = false;
-            goStep(1);
+            
+            // Блокируем кнопки
+            document.getElementById('btnNext1').disabled = true;
+            document.getElementById('btnNext2').disabled = true;
+            
+            // Возвращаемся в начало
+            window.goStep(1);
             document.getElementById('successBox').style.display = "none";
             document.getElementById('wizardContainer').style.display = "block";
-        }
+        };
 
-        function requestPro() {
-            alert("Заявка на тариф PRO отправлена! Менеджер рассмотрит ее в админ-панели.");
-        }
+        // 7. ПРОФИЛЬ
+        window.requestPro = function() {
+            alert("Заявка успешно отправлена! Менеджер свяжется с вами в Telegram для активации тарифа PRO.");
+        };
 
-        function renderAdmin() {
-            const container = document.getElementById('adminDataContainer');
-            const pendingAds = adsDb.filter(a => a.status === 'moderation');
-            
-            container.innerHTML = `
-                <div class="card-box">
-                    <h3 style="margin-bottom:12px;">Модерация (${pendingAds.length})</h3>
-                    ${pendingAds.map(a => `
-                        <div style="background:var(--bg-input); padding:10px; border-radius:8px; margin-bottom:8px;">
-                            <strong>${a.title}</strong>
-                            <p style="color:var(--success); font-size:12px;">${a.price} UZS</p>
-                            <button class="btn-primary" style="margin-top:8px; padding:10px;" onclick="approveAd(${a.id})">Одобрить публикацию</button>
-                        </div>
-                    `).join('') || "<p style="font-size:12px;">Очередь пуста</p>"}
-                </div>
-            `;
-        }
-
-        function approveAd(id) {
-            adsDb = adsDb.map(a => { if(a.id === id) a.status = 'active'; return a; });
-            renderAdmin();
-        }
-
-        function logout() {
+        window.logout = function() {
+            // Скрываем меню и переходим на экран входа
             document.getElementById('appNavbar').style.display = "none";
             document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
             document.getElementById('screen-auth').classList.add('active');
-        }
+            
+            // Очистка данных авторизации
+            document.getElementById('authPassword').value = '';
+            window.currentUser = null;
+        };
+
+        // 8. АДМИН ПАНЕЛЬ
+        window.renderAdmin = function() {
+            const container = document.getElementById('adminDataContainer');
+            const pendingAds = window.adsDb.filter(a => a.status === 'moderation');
+            
+            if(pendingAds.length === 0) {
+                container.innerHTML = `
+                    <h3 style="margin-bottom:12px;">Модерация (0)</h3>
+                    <p style="font-size:12px; color:var(--text-muted); font-family:'Montserrat', sans-serif;">Все объявления проверены. Очередь пуста.</p>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <h3 style="margin-bottom:16px;">На проверке (${pendingAds.length})</h3>
+                ${pendingAds.map(a => `
+                    <div style="background:var(--bg-input); padding:16px; border-radius:12px; margin-bottom:12px; border:1px solid var(--border);">
+                        <h4 style="font-size:14px; margin-bottom:6px;">${a.title}</h4>
+                        <p style="color:var(--success); font-weight:800; font-size:14px; font-family:'Montserrat', sans-serif;">${a.price.toLocaleString()} UZS</p>
+                        ${a.vip ? '<p style="color:var(--warning); font-size:10px; margin-top:4px; font-weight:bold; font-family:\'Montserrat\', sans-serif;">Запрос на TOP VIP</p>' : ''}
+                        <button class="btn-primary" style="margin-top:12px; padding:12px; font-size:11px;" onclick="window.approveAd(${a.id})">Одобрить публикацию</button>
+                    </div>
+                `).join('')}
+            `;
+        };
+
+        window.approveAd = function(id) {
+            window.adsDb = window.adsDb.map(a => {
+                if(a.id === id) a.status = 'active';
+                return a;
+            });
+            window.renderAdmin(); // Обновляем список админа
+            alert("Объявление одобрено и добавлено в ленту!");
+        };
     </script>
 </body>
 </html>
